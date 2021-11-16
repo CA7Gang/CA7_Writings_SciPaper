@@ -62,9 +62,32 @@
 
 % *** STUFF WE ADD THAT THE PACKAGE SHOULD HAVE HAD ***
 
+
+
+
+%Math Packages
 \usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{kbordermatrix}
+\renewcommand{\kbldelim}{[}% Left delimiter
+\renewcommand{\kbrdelim}{]}% Right delimiter
+%-----------------------------------------%
 \usepackage{hyperref}
 \usepackage{cleveref}
+
+\usepackage[]{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,shapes.geometric, arrows,positioning,calc}
+\tikzset{
+	block/.style = {draw, fill=white, rectangle, minimum height=3em, minimum width=3em},
+	tmp/.style  = {coordinate}, 
+	sum/.style= {draw, fill=white, circle, node distance=1cm},
+	input/.style = {coordinate},
+	output/.style= {coordinate},
+	pinstyle/.style = {pin edge={to-,thin,black}
+	}
+}
 
 
 
@@ -325,28 +348,28 @@
 % not capitalized unless they are the first or last word of the title.
 % Linebreaks \\ can be used within to get better formatting as desired.
 % Do not put math or special symbols in the title.
-\title{Bare Demo of IEEEtran.cls\\ for IEEE Conferences}
+\title{Modelling and Control of Water Distributed Network}
 
 
 % author names and affiliations
 % use a multiple column layout for up to three different
 % affiliations
-\author{\IEEEauthorblockN{Michael Shell}
-\IEEEauthorblockA{School of Electrical and\\Computer Engineering\\
-Georgia Institute of Technology\\
-Atlanta, Georgia 30332--0250\\
-Email: http://www.michaelshell.org/contact.html}
-\and
-\IEEEauthorblockN{Homer Simpson}
-\IEEEauthorblockA{Twentieth Century Fox\\
-Springfield, USA\\
-Email: homer@thesimpsons.com}
-\and
-\IEEEauthorblockN{James Kirk\\ and Montgomery Scott}
-\IEEEauthorblockA{Starfleet Academy\\
-San Francisco, California 96678--2391\\
-Telephone: (800) 555--1212\\
-Fax: (888) 555--1212}}
+%\author{\IEEEauthorblockN{Michael Shell}
+%\IEEEauthorblockA{School of Electrical and\\Computer Engineering\\
+%Georgia Institute of Technology\\
+%Atlanta, Georgia 30332--0250\\
+%Email: http://www.michaelshell.org/contact.html}
+%\and
+%\IEEEauthorblockN{Homer Simpson}
+%\IEEEauthorblockA{Twentieth Century Fox\\
+%Springfield, USA\\
+%Email: homer@thesimpsons.com}
+%\and
+%\IEEEauthorblockN{James Kirk\\ and Montgomery Scott}
+%\IEEEauthorblockA{Starfleet Academy\\
+%	San Francisco, California 96678--2391\\
+%	Telephone: (800) 555--1212\\
+%	Fax: (888) 555--1212}}
 
 % conference papers do not typically use \thanks and this command
 % is locked out in conference mode. If really needed, such as for
@@ -356,20 +379,18 @@ Fax: (888) 555--1212}}
 % for over three affiliations, or if they all won't fit within the width
 % of the page, use this alternative format:
 % 
-%\author{\IEEEauthorblockN{Michael Shell\IEEEauthorrefmark{1},
-%Homer Simpson\IEEEauthorrefmark{2},
-%James Kirk\IEEEauthorrefmark{3}, 
-%Montgomery Scott\IEEEauthorrefmark{3} and
-%Eldon Tyrell\IEEEauthorrefmark{4}}
-%\IEEEauthorblockA{\IEEEauthorrefmark{1}School of Electrical and Computer Engineering\\
-%Georgia Institute of Technology,
-%Atlanta, Georgia 30332--0250\\ Email: see http://www.michaelshell.org/contact.html}
-%\IEEEauthorblockA{\IEEEauthorrefmark{2}Twentieth Century Fox, Springfield, USA\\
-%Email: homer@thesimpsons.com}
-%\IEEEauthorblockA{\IEEEauthorrefmark{3}Starfleet Academy, San Francisco, California 96678-2391\\
-%Telephone: (800) 555--1212, Fax: (888) 555--1212}
-%\IEEEauthorblockA{\IEEEauthorrefmark{4}Tyrell Inc., 123 Replicant Street, Los Angeles, California 90210--4321}}
-
+\author{\IEEEauthorblockN{
+Martin Højlund Therkildsen\IEEEauthorrefmark{0},
+Rasmus Løvschall Kristiansen\IEEEauthorrefmark{0},
+Kasper Laustsen\IEEEauthorrefmark{0}, 
+Jeppe Jensen\IEEEauthorrefmark{0},\\
+Laurits Adnersen\IEEEauthorrefmark{0},
+Mathias Clement Frederiksen\IEEEauthorrefmark{0} and 
+Christian Møller Jensen\IEEEauthorrefmark{0},
+}
+\IEEEauthorblockA{\IEEEauthorrefmark{0}Control and Automation, Aalbrog University
+\\ Email: es-21-ca-7-733@student.aau.dk}
+}
 
 
 
@@ -404,26 +425,8 @@ The abstract goes here.
 \IEEEpeerreviewmaketitle
 
 
-
 \section{Introduction}
-% no \IEEEPARstart
-This demo file is intended to serve as a ``starter file''
-for IEEE conference papers produced under \LaTeX\ using
-IEEEtran.cls version 1.8b and later.
-% You must have at least 2 lines in the paragraph with the drop letter
-% (should never be an issue)
-I wish you the best of success.
-
-\hfill mds
- 
-\hfill August 26, 2015
-
-\subsection{Subsection Heading Here}
-Subsection text here.
-
-
-\subsubsection{Subsubsection Heading Here}
-Subsubsection text here.
+\input{Chapters/Introduction}
 
 
 % An example of a floating figure using the graphicx package.
@@ -520,7 +523,14 @@ Subsubsection text here.
 % footnotes above bottom floats. This can be corrected via the
 % \fnbelowfloat command of the stfloats package.
 
+\section{System modelling}
+Modelling of the WDN is done via graph theoretical analysis and a component analysis. 
+\input{Chapters/GraphTheory}
+\input{Chapters/ComponentModel}
+\input{Chapter/NonlinearSystemModel}
 
+\section{Control Structure}
+\input{Chapters/ControlStructure}
 
 
 \section{Conclusion}
@@ -534,6 +544,8 @@ The conclusion goes here.
 
 % use section* for acknowledgment
 \section*{Acknowledgment}
+
+
 
 
 The authors would like to thank...

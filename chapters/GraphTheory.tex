@@ -1,0 +1,18 @@
+\subsection{Graph Theory}
+The Graph network used in this project looks as follows:
+
+\begin{figure}[h!]
+	\centering
+		\resizebox{\columnwidth}{!}{
+	\input{TikzFigures/TikzGraphNetwork.tex}}
+	\caption{Graph Network of Water Distributed Network}
+\end{figure}
+
+And the incident matrix is described as follows:
+\begin{equation*}
+	H_{i,j} = \begin{cases}
+		-1 & \text{If the $j^{th}$ edge enters the $i^{th}$ node} \\
+		0 & \text{If the $j^{th}$ edge is not connected to the $i^{th}$ node} \\
+		1 & \text{If the $j^{th}$ edge s leaving the $i^{th}$ node}
+	\end{cases}
+\end{equation*} %Description of the incident matrix

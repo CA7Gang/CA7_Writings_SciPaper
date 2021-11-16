@@ -1,0 +1,34 @@
+\subsection{Component Model}
+The components of the system are: Pipes, Valves and Pumps. Each of which can be described by the two variables:
+\begin{equation*}
+	\begin{bmatrix} \Delta{p_k}\\q_k\end{bmatrix}=\begin{bmatrix}
+		p_i-p_j\\q_k
+	\end{bmatrix}
+\end{equation*}
+i.e. the differential pressure across, and the flow through the $ k^{th} $ component.\\
+\textbf{Pipe Model:}
+The differential pressure across the $ k^{th} $ pipe is modelled as:
+\begin{equation}
+	\begin{split}
+		\Delta{p_{k}} = &\frac{L\cdot \rho}{A}\cdot \dot{q_{k}}
+		+\Big(f \cdot \frac{8\cdot L\cdot \rho}{\pi^{2} \cdot D^{5}} + k_{f}\cdot \frac{8\cdot \rho}{\pi^{2} \cdot D^{4}}\Big)\cdot |q_{k}|\cdot q_{k}\\
+		&- \rho \cdot g \cdot \Delta{h_{k}} = \mathcal{J}\dot{q} + \lambda(q) + \Delta z
+	\end{split}
+\end{equation}
+
+\textbf{Valve Mode:}
+The differential pressure across the $ k^{th} $ valve is modelled as:
+\begin{equation}
+	\Delta p = \frac{1}{K_{valve}(OD)^2} \cdot |q|\cdot q
+\end{equation}
+
+\textbf{Pump Model:}
+The differential pressure across the $ k^{th} $ Pump is modelled as:
+\begin{equation}\label{eq:PumpPressure}
+	\Delta p =   a_0\cdot \omega^2 +  a_1\cdot \omega \cdot q -a_2\cdot |q|\cdot q
+\end{equation}
+
+\textbf{Tank Model:} The 
+\begin{equation} \label{eq:dpTank}
+	\dot{p}_{\tau}=-\tau \cdot d_{\tau} 
+\end{equation} 
