@@ -72,6 +72,8 @@
 \usepackage{kbordermatrix}
 \renewcommand{\kbldelim}{[}% Left delimiter
 \renewcommand{\kbrdelim}{]}% Right delimiter
+
+\usepackage{bbm}
 %-----------------------------------------%
 \usepackage{hyperref}
 \usepackage{cleveref}
@@ -90,6 +92,13 @@
 }
 
 
+% Setup for use of lemmas and theorems
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+% Table stuff
+\usepackage{booktabs}
 
 % Some very useful LaTeX packages include:
 % (uncomment the ones you want to load)
@@ -112,10 +121,6 @@
 % \ifCLASSINFOpdf conditional that works the same way.
 % When switching from latex to pdflatex and vice-versa, the compiler may
 % have to be run twice to clear warning/error messages.
-
-
-
-
 
 
 % *** CITATION PACKAGES ***
@@ -406,7 +411,8 @@ Christian Møller Jensen\IEEEauthorrefmark{0},
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-The abstract goes here.
+The abstract goes here.\\
+We succeeded with absolutely everything,we are awesome. 
 \end{abstract}
 
 % no keywords
@@ -524,18 +530,21 @@ The abstract goes here.
 % \fnbelowfloat command of the stfloats package.
 
 \section{System modelling}
-Modelling of the WDN is done via graph theoretical analysis and a component analysis. 
 \input{Chapters/GraphTheory}
 \input{Chapters/ComponentModel}
 \input{Chapters/NonlinearSystemModel}
 \input{Chapters/linearisedModel}
 
+\newpage
 \section{Control Structure}
 \input{Chapters/ControlStructure}
 
+\section{Results}
+\input{Chapters/Results}
+
 
 \section{Conclusion}
-The conclusion goes here.
+\input{Chapters/Conclusion}
 
 
 
@@ -545,11 +554,11 @@ The conclusion goes here.
 
 % use section* for acknowledgment
 \section*{Acknowledgment}
+\input{Chapters/Acknowledgment}
 
 
 
 
-The authors would like to thank...
 
 
 
@@ -579,7 +588,7 @@ The authors would like to thank...
 % (used to reserve space for the reference number labels box)
 
 \bibliographystyle{ieeetran}
-%\bibliography{bib file}
+\bibliography{../../RefLib/CA7Projekt.bib}
 
 
 

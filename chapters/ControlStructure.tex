@@ -1,4 +1,4 @@
-The control strategy proposed is presented in \cref{fig:tikzControlStrat} and includes two distinct control-loops; one for handling the fast dynamics, i.e. the pipes flows and one for handling the slow dynamics, i.e. is the pressure in the tank.  
+The control strategy proposed is presented in \cref{fig:tikzControlStrat} and includes two distinct control-loops; one for handling the fast dynamics, i.e. the pumps and one for handling the slow dynamics, i.e. is the pressure in the tank.  
 \begin{figure}[h!]
 	\centering
 	\resizebox{\columnwidth}{!}{
@@ -7,3 +7,4 @@ The control strategy proposed is presented in \cref{fig:tikzControlStrat} and in
 	\label{fig:tikzControlStrat}
 \end{figure}
 A Linear quadratic regulator (LQR) outputs a flow reference to a PI controller based on the residual between tank pressure reference and actual tank pressure. The PI controls gives a reference speed to the pumps based on.....
+

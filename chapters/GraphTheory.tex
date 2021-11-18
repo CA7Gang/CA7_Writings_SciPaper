@@ -1,14 +1,11 @@
+A mathematical model of the WDN is presented by the use of basic Graph theory. Then component model for various components in the network is presented, including a model of an elevated water reservoir. 
+
 \subsection{Graph Theory}
-The Graph network used in this project looks as follows:
+It is not expected that the readers of this article have a deep understanding of graph theory therefore an introduction is given here \cite[Chap. 9]{Deo}:\\  
+ 
+A \textbf{directed graph} is a set of nodes $ \{v_1,..,v_n\} $ and a set of edges $ \{e_1,..,e_m\} $, with each edge associated with a node pair $ \{v_i,v_j\} $ and an arrow pointing from $ v_i $ to $ v_j $. \\
 
-\begin{figure}[h!]
-	\centering
-		\resizebox{\columnwidth}{!}{
-	\input{TikzFigures/TikzGraphNetwork.tex}}
-	\caption{Graph Network of Water Distributed Network}
-\end{figure}
-
-And the incident matrix is described as follows:
+The \textbf{Incident Matrix} of a directed graph is defined as:
 \begin{equation*}
 	H_{i,j} = \begin{cases}
 		-1 & \text{If the $j^{th}$ edge enters the $i^{th}$ node} \\
@@ -16,3 +13,54 @@ And the incident matrix is described as follows:
 		1 & \text{If the $j^{th}$ edge s leaving the $i^{th}$ node}
 	\end{cases}
 \end{equation*} %Description of the incident matrix
+The \textbf{Reduced Incidence Matrix $\bar{H}$} is obtained by choosing one of the nodes as reference and removing it from $ H $.\\
+
+A \textbf{loop} is a unique route along the edges of the graph, where all nodes are unique except the end node. The \textbf{Loop matrix} is defined as:
+\begin{equation*}
+	B_{i,j} = \begin{cases}
+		1 & \text{If the direction of the $ i^{th} $ loop and the} \\& \text{$j^{th}$ edge agrees}\\
+		-1 & \text{If the direction of the $ i^{th} $ loop and the} \\& \text{$j^{th}$ edge does not agrees}\\
+		0 & \text{If the $ i^{th} $ loop does not include the $ j^{th} $ edge}\\
+\end{cases}
+\end{equation*}
+A \textbf{Spanning Tree} is a connected graph with no loops, i.e it is not possible to find a route through the graph starting and ending up in the same node without entering a node more than one time. \\
+
+A \textbf{Chord} is an edge which creates exactly one loop by being added to the spanning tree. 
+
+
+The Graph network used in this project is presented in \cref{fig:tikzWDNGraph}:
+
+\begin{figure}[h!]
+	\centering
+		\resizebox{\columnwidth}{!}{
+	\input{TikzFigures/TikzGraphNetwork.tex}}
+	\caption{Graph Network of Water Distributed Network}
+	\label{fig:tikzWDNGraph}
+\end{figure}
+It is observed that one can obtain more than one spanning trees by choosing $ e_7 $ and one random edge in $ \{e_3,e_5,e_6,e_8,e_{10},e_{13}\} $ as chords. We choose 
+$ E_C = \{e_3,e_7\} $, which gives the spanning tree 
+$ E_T = \{e_1,e_2,e_4,..,e_6,e_8,..,e_{14}\} $ and the reduced incidence matrix is obtained by choosing the node $ v_13 $ as reference.\\
+
+For a WDN Kirchhoff's node law is \cite{Jensen} is described by:
+\begin{equation}\label{eq:KirchNodeLaw}
+	Hq = d
+\end{equation} 
+With $ q $ being the vector of flows in the edges and $ d $ is the nodal demands, with $ d<0 $ and $ d>0 $ representing a consumer and a source respectively.   
+
+Furthermore, mass conservation is assumed. This implies that there can at most be $n-1$ independent nodal demands, i.e.:
+
+\begin{equation}\label{eq:MassConservation}
+	d_n = -\sum_{i=1}^{n-1}d_i
+\end{equation}
+
+\begin{lemma}\label{lem:TreePartitionLemma}
+	Let $H_T$ be the incidence matrix partition corresponding to the spanning tree of the graph described by $H$, and let $\bar{H}_T$ be its equivalent with respect to the reduced incidence matrix $\bar{H}$. $\bar{H}_T$ is invertible since a tree is a connected graph with $n-1$ edges \cite{Deo}, and the following holds
+	
+	\begin{equation}\label{eq:TreePartitionLemma}
+		H_T\bar{H}_T^{-1} = \begin{bmatrix} I_{n-1} \\ \mathbbm{1}^T	\end{bmatrix}
+	\end{equation}
+	
+	where $\mathbbm{1}$ is a vector of ones and $I_{n-1} \in \mathbb{R}^{n-1 \times n-1}$ is an identity matrix.
+\end{lemma}
+
+
