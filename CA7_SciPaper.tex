@@ -72,6 +72,7 @@
 \usepackage{kbordermatrix}
 \renewcommand{\kbldelim}{[}% Left delimiter
 \renewcommand{\kbrdelim}{]}% Right delimiter
+\usepackage{siunitx}
 
 \usepackage{bbm}
 %-----------------------------------------%
@@ -391,8 +392,7 @@ Kasper Laustsen\IEEEauthorrefmark{0},
 Jeppe Nørgaard Jensen\IEEEauthorrefmark{0},\\
 Laurits Hastrup Andersen\IEEEauthorrefmark{0},
 Mathias Clement Frederiksen\IEEEauthorrefmark{0} and 
-Christian Møller Jensen\IEEEauthorrefmark{0},
-}
+Christian Møller Jensen\IEEEauthorrefmark{0}}
 \\ 
 \IEEEauthorblockA{\IEEEauthorrefmark{0}Technical Faculty of IT and Design, Department of Electronic Systems, Aalborg University
 \\ Email: es-21-ca-7-733@student.aau.dk}
@@ -411,9 +411,8 @@ Christian Møller Jensen\IEEEauthorrefmark{0},
 
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
-\begin{abstract}
-The abstract goes here.\\
-Blink twice if the water lab is still leaking
+\begin{abstract}\label{sec:Abstract}
+High quality control of Water Distribution Networks (WDN) is critical to reliable supply of drinking water to consumers, but is subject to complex nonlinear dynamics and delays induced by actuator characteristics and long-distance wireless communication. This paper proposes a cascaded control system that delivers a constant elevated reservoir level via an outer velocity-form Linear Quadratic Regulator (VF-LQR) and an inner PID pump control loop. Furthermore, disturbance rejection in the outer loop and leakage detection are facilitated by a Kalman filter (KF). The paper presents comprehensive simulation and experimental validation of the proposed control design, as well as a worst-case analysis of robustness under feedback delay induced by wireless communication losses.
 \end{abstract}
 
 % no keywords
@@ -432,7 +431,7 @@ Blink twice if the water lab is still leaking
 \IEEEpeerreviewmaketitle
 
 
-\section{Introduction}
+\section{Introduction}\label{sec:Introduction}
 \input{Chapters/Introduction}
 
 
@@ -530,25 +529,19 @@ Blink twice if the water lab is still leaking
 % footnotes above bottom floats. This can be corrected via the
 % \fnbelowfloat command of the stfloats package.
 
-\section{System modelling}
-\input{Chapters/GraphTheory}
-\input{Chapters/ComponentModel}
-\input{Chapters/NonlinearSystemModel}
-\input{Chapters/linearisedModel}
+\section{System Modelling}\label{sec:SysModel}
+\input{Chapters/SystemModel}
 
 \newpage
-\section{Control Structure}
+\section{Control Structure}\label{sec:ControlStructure}
 \input{Chapters/ControlStructure}
 
-\section{Results}
+\section{Results}\label{sec:Results}
 \input{Chapters/Results}
 
 
-\section{Conclusion}
+\section{Conclusion}\label{sec:Conclusion}
 \input{Chapters/Conclusion}
-
-
-
 
 % conference papers do not normally have an appendix
 

@@ -1,4 +1,5 @@
-The control strategy proposed is presented in \cref{fig:tikzControlStrat} and includes two distinct control-loops; one for handling the fast dynamics, i.e. the pumps and one for handling the slow dynamics, i.e. is the pressure in the tank.  
+The control strategy proposed is presented in \cref{fig:tikzControlStrat} and includes the aforementioned inner fast loop and outer slow loop:  
+
 \begin{figure}[h!]
 	\centering
 	\resizebox{\columnwidth}{!}{
@@ -6,5 +7,85 @@ The control strategy proposed is presented in \cref{fig:tikzControlStrat} and in
 	\caption{Control Strategy including control for fast and slow dynamics}
 	\label{fig:tikzControlStrat}
 \end{figure}
-A Linear quadratic regulator (LQR) outputs a flow reference to a PI controller based on the residual between tank pressure reference and actual tank pressure. The PI controls gives a reference speed to the pumps based on.....
+
+We will first address the outer LQR controller. This is an optimal controller that, in its general form, is given by the solution to the Lagrange problem:
+
+\begin{equation}\label{eq:LagrangeProblem}
+		J = \int_{t_0}^{\infty} \big(x^T(t)Qx(t) + u^T(t)Ru(t)\big)dt
+\end{equation} 
+
+constrained by the dynamics:
+
+\begin{equation}\label{eq:LQRDynamicsConstraint}
+	\begin{gathered}
+		\dot{x}(t) = Ax(t) + Bu(t) \\
+		x(t_0) = x_0
+	\end{gathered} 
+\end{equation}
+
+The optimal solution to this problem is given by minimising the Hamiltonian $\mathcal{H}$ \cite{Liberzon2012}:
+
+\begin{equation}\label{eq:Hamiltonian}
+	\begin{gathered}
+			\mathcal{H} = \lambda^T(t) f(x(t),u(t)) - \mathcal{L}(x(t),u(t)) \\
+			f(x(t),u(t)) = A(t)x(t) + B(t)u(t) \\
+			\mathcal{L}(x(t),u(t)) =  x^T(t)Q(t)x(t) - u^T(t)R(t)u(t)
+	\end{gathered}
+\end{equation}
+
+which gives a solution of the type:
+
+\begin{equation}\label{eq:LQRSolution}
+	u^*(t) = -RB^TPx^*(t) = -Kx^*(t)
+\end{equation}
+
+where $P$ is the solution to the algebraic Riccatti equation:
+
+\begin{equation}\label{eq:ARE}
+	PA + A^TP + Q - PBR^{-1}B^TP = 0
+\end{equation}
+
+However, the standard LQR has several major issues. It only regulates to the origin, it does not have integral action, and it does not reject state disturbances. We therefore, as in Pannocchia et al. \cite{Pannocchia2015a} rewrite the above as a discrete problem in deviation variables and solve:
+
+\begin{equation}\label{eq:LagrangeProblemDeviation}
+	\begin{gathered}
+	J = \sum_{k_0}^{\infty} \big(\zeta(k)^TQ\zeta(k) + \tilde{u}(k)^TR\tilde{u}(k)\big) \\
+	\zeta = \begin{bmatrix}	x(k)-x(k-1) \\ y(k)-r(k) \end{bmatrix}, \quad \tilde{u}(k) = u(k)-u(k-1) 
+	\end{gathered}
+\end{equation} 
+
+where the constraining dynamics are given by:
+
+\begin{equation}\label{eq:VelocityMatrices}
+	\begin{gathered}
+		\zeta(k+1) = \tilde{A}\zeta(k) + \tilde{B}\tilde{u}(k) \\
+		\tilde{A} = \begin{bmatrix} A & 0 \\ CA & I	\end{bmatrix}, \ 
+		\tilde{B} = \begin{bmatrix} B \\ CB	\end{bmatrix}, \ \tilde{C} = \begin{bmatrix} 0 & I	\end{bmatrix}
+	\end{gathered}
+\end{equation}
+
+and the optimal control policy becomes:
+
+\begin{equation}\label{eq:OptimalVFLQRPolicy}
+\begin{gathered}
+\tilde{u}^*(k) = -\tilde{K}\tilde{x}^*(k) \\
+u^*(k) = \sum_{i=1}^{k} \tilde{u}^*(k)
+\end{gathered}
+\end{equation}
+
+This control policy, however, still lacks disturbance rejection. Assuming that we are only concerned with optimal control of the disturbance-free subsystem, complete rejection of the state disturbance $\delta(k)$ can then be achieved by augmenting \cref{eq:OptimalVFLQRPolicy} \cite{Singh2017}:
+
+\begin{equation}
+	u(k) = \sum_{i=1}^{k} \tilde{u}^*(k) - B^\dagger B\delta(k)
+\end{equation}
+
+where $B^\dagger$ is the Moore-Penrose pseudoinverse of $B$.
+
+%\begin{equation}\label{eq:InfLQRHamiltonian}
+%	\mathcal{H}(x(t),u(t),\lambda(t),t)) = \lambda^T(t)\big(Ax(t) + Bu(t)\big) - x^T(t)Qx(t) - u^T(t)Ru(t)
+%\end{equation}
+
+
+
+
 
