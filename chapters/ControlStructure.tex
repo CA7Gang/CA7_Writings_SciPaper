@@ -1,4 +1,4 @@
-The control strategy proposed is presented in \cref{fig:tikzControlStrat} and includes the aforementioned inner fast loop and outer slow loop:  
+The structure of the proposed control strategy is presented in \cref{fig:tikzControlStrat} and includes the aforementioned inner fast loop and outer slow loop:  
 
 \begin{figure}[h!]
 	\centering
@@ -8,7 +8,9 @@ The control strategy proposed is presented in \cref{fig:tikzControlStrat} and in
 	\label{fig:tikzControlStrat}
 \end{figure}
 
-We will first address the outer LQR controller. This is an optimal controller that, in its general form, is given by the solution to the Lagrange problem:
+\subsection{Outer Loop}\label{subsec:OuterLoop}
+
+We will first address the outer LQR controller. This is an optimal controller that, in its continuous, LTI, infinite-horizon form, is given by the solution to the Lagrange problem:
 
 \begin{equation}\label{eq:LagrangeProblem}
 		J = \int_{t_0}^{\infty} \big(x^T(t)Qx(t) + u^T(t)Ru(t)\big)dt
@@ -45,7 +47,7 @@ where $P$ is the solution to the algebraic Riccatti equation:
 	PA + A^TP + Q - PBR^{-1}B^TP = 0
 \end{equation}
 
-However, the standard LQR has several major issues. It only regulates to the origin, it does not have integral action, and it does not reject state disturbances. We therefore, as in Pannocchia et al. \cite{Pannocchia2015a} rewrite the above as a discrete problem in deviation variables and solve:
+However, the standard LQR has several major issues. It only regulates to the origin, it does not have integral action, and it does not reject state disturbances. We therefore, as in Pannocchia et al. \cite{Pannocchia2015a}, rewrite the above as a discrete problem in deviation variables and solve:
 
 \begin{equation}\label{eq:LagrangeProblemDeviation}
 	\begin{gathered}
@@ -68,18 +70,71 @@ and the optimal control policy becomes:
 
 \begin{equation}\label{eq:OptimalVFLQRPolicy}
 \begin{gathered}
-\tilde{u}^*(k) = -\tilde{K}\tilde{x}^*(k) \\
-u^*(k) = \sum_{i=1}^{k} \tilde{u}^*(k)
+\tilde{u}^*(k)  = -\tilde{K}\tilde{x}^*(k) \\
+\tilde{K} = (\tilde{B}^TP\tilde{B}-R)^{-1}(\tilde{B}^TP\tilde{A}) \\
+u^*(k) = \sum_{i=1}^{k} \tilde{u}^*(i)
 \end{gathered}
 \end{equation}
 
-This control policy, however, still lacks disturbance rejection. Assuming that we are only concerned with optimal control of the disturbance-free subsystem, complete rejection of the state disturbance $\delta(k)$ can then be achieved by augmenting \cref{eq:OptimalVFLQRPolicy} \cite{Singh2017}:
+where $P$ is now the solution to the \textit{discrete} algebraic Riccatti equation:
 
-\begin{equation}
-	u(k) = \sum_{i=1}^{k} \tilde{u}^*(k) - B^\dagger B\delta(k)
+\begin{equation}\label{eq:DARE}
+	-Q = \tilde{A}^TP\tilde{A} - P - (\tilde{A}^TP\tilde{B})(\tilde{B}^TP\tilde{B}+R)^{-1}(\tilde{B}^TP\tilde{A})
 \end{equation}
 
-where $B^\dagger$ is the Moore-Penrose pseudoinverse of $B$.
+This control policy clearly has tracking as $\zeta(k+1) = 0$ implies $y(k+1)-r(k+1) = 0$, and has integral action by virtue of its incremental form. However, it still lacks disturbance rejection. Assuming that we are only concerned with optimal control of the disturbance-free subsystem, complete rejection of the state disturbance $\delta(k)$ can then be achieved by augmenting \cref{eq:OptimalVFLQRPolicy} \cite{Singh2017}:
+
+\begin{equation}
+	u(k) = \sum_{i=1}^{k} \tilde{u}^*(k) - B^\dagger \mathcal{B}\delta(k)
+\end{equation}
+
+where $B^\dagger$ is the Moore-Penrose pseudoinverse of $B$ and $\mathcal{B}$ is the disturbance input matrix.
+
+\subsection{Inner Loop}\label{subsec:InnerLoop}
+
+We now address the inner loop and its PID controllers. The model used for their design is the state-space model of the fast dynamics given in \cref{eq:LinearisedModelWithTank}, with a Padé approximation of a $4$-second output delay included. This state-space system with output delay can be converted into the frequency-domain transfer matrix $G(s)$:
+
+\begin{equation}\label{eq:TransferMatrix}
+	G(s) = \begin{bmatrix} G_{11}(s) & G_{12}(s) \\ G_{21}(s) & G_{22}(s)\end{bmatrix}
+\end{equation}
+
+which can be shown to be approximately diagonal:
+
+\begin{figure}[h!]
+ 	\centering
+ 	\includegraphics[width=\linewidth,height=4cm]{Graphics/BodeMagDelayPlot.pdf}
+ 	\caption{Transfer matrix magnitude plots, output delay included}
+ 	\label{fig:BodeMagDelayPlot}
+\end{figure}
+
+\newpage
+
+On account of this the PID controllers for pump speeds $\omega_1$ and $\omega_2$ can be designed as SISO controllers without decoupling. Their poles and zeros are respectively:
+
+\begin{equation}\label{eq:PumpTFNumDen}
+	\begin{gathered}
+		z_{11} = \begin{bmatrix}-18.92 & -14.00 & -0.56 & -0.34 & -0.19	\end{bmatrix} \\
+		z_{22} = \begin{bmatrix}-20.72 & -14.10 & -0.41 & -0.36 & -0.16	\end{bmatrix} \\
+		p_{11} = \begin{bmatrix}-20.77 & -14.86 & -0.56 & -0.39 & -0.33 & -0.16\end{bmatrix} \\
+		p_{22} = \begin{bmatrix}-20.77 & -14.86 & -0.56 & -0.39 & -0.33 & -0.16\end{bmatrix}
+	\end{gathered}
+\end{equation}
+
+Clearly many of these poles and zeros are approximately cancelling, and \cref{fig:BodeMagDelayPlot} indicates that $G_{11}(s) \approx G_{22}(s)$, so \cref{eq:PumpTFNumDen} can, for design purposes, be simplified to:
+
+\begin{equation}\label{eq:PumpTFSimple}
+	\begin{gathered}
+		z_{11} = z_{22} = \begin{bmatrix}-0.19\end{bmatrix} \\
+		p_{11} = p_{22} = \begin{bmatrix}-0.39 & -0.16 \end{bmatrix}
+	\end{gathered}
+\end{equation}
+
+A PI controller is designed (i.e., the D term is $0$) via the root-locus method \cite{Franklin}, with the goal of no overshoot to avoid ringing and accompanying pressure oscillations in the pipes. To accommodate the presence of an outer loop and allow this to operate at a reasonable sample rate, a bandwidth of $0.05 \frac{\si{rad}}{\si{s}}$ is chosen. Note that per \cite{Skogestad2005}, a stable controller cannot be designed with a closed-loop bandwidth higher than $\frac{1}{T_{delay}} = 0.25 \frac{\si{rad}}{\si{s}}$. The resulting controller is:
+
+\begin{equation}\label{eq:PIDTransferFunction}
+	C(s) = 1.8\frac{s+0.05}{s}
+\end{equation}
+
 
 %\begin{equation}\label{eq:InfLQRHamiltonian}
 %	\mathcal{H}(x(t),u(t),\lambda(t),t)) = \lambda^T(t)\big(Ax(t) + Bu(t)\big) - x^T(t)Qx(t) - u^T(t)Ru(t)
