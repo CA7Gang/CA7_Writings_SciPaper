@@ -98,7 +98,7 @@ We now address the inner loop and its PID controllers. The model used for their 
 	G(s) = \begin{bmatrix} G_{11}(s) & G_{12}(s) \\ G_{21}(s) & G_{22}(s)\end{bmatrix}
 \end{equation}
 
-which can be shown to be approximately diagonal:
+which can be shown to be approximately diagonal as per \Cref{fig:BodeMagDelayPlot}:
 
 \begin{figure}[h!]
  	\centering
@@ -109,7 +109,7 @@ which can be shown to be approximately diagonal:
 
 \newpage
 
-On account of this the PID controllers for pump speeds $\omega_1$ and $\omega_2$ can be designed as SISO controllers without decoupling. Their poles and zeros are respectively:
+On account of this the PID controllers for pump speeds $\omega_1$ and $\omega_2$ can be designed as decentralised SISO controllers without decoupling. Their poles and zeros are respectively:
 
 \begin{equation}\label{eq:PumpTFNumDen}
 	\begin{gathered}
@@ -132,9 +132,14 @@ Clearly many of these poles and zeros are approximately cancelling, and \cref{fi
 A PI controller is designed (i.e., the D term is $0$) via the root-locus method \cite{Franklin}, with the goal of no overshoot to avoid ringing and accompanying pressure oscillations in the pipes. To accommodate the presence of an outer loop and allow this to operate at a reasonable sample rate, a bandwidth of $0.05 \frac{\si{rad}}{\si{s}}$ is chosen. Note that per \cite{Skogestad2005}, a stable controller cannot be designed with a closed-loop bandwidth higher than $\frac{1}{T_{delay}} = 0.25 \frac{\si{rad}}{\si{s}}$. The resulting controller is:
 
 \begin{equation}\label{eq:PIDTransferFunction}
-	C(s) = 1.8\frac{s+0.05}{s}
+	C(s) = 1.8\frac{s+0.125}{s}
 \end{equation}
 
+\subsection{Distance-Induced Feedback Delay}\label{subsec:FeedbackDelay}
+
+Until now we have assumed that there are no meaningful losses or delays attributable to communication between the individual elements of the control system. This assumption is generally counterfactual, as the outer and inner loops of the proposed control structure are likely to be located some physical distance from each other, and may be communicating over WiFi rather than a high-reliability physical medium.
+
+A study by Anmon Sheth et al. \cite{Sheth2007} has examined the real-world packet loss experienced by WiFi-based Long Distance Networks (WiLD) using the MAC $802.11$ protocol. They find negligible\footnote{Under $5\%$ at distances up to $15 \si{km}$} losses in a rural setting, but find significant losses in an urban environment. The loss rate appears to scale exponentially with distance, growing from a worst-case loss rate of $7\%$ at $2\si{km}$ to a worst-case loss rate of $60\%$ at $20\si{km}$. If these losses are modelled as a Poisson distribution, we find $99$th percentile packet loss events of respectively $1.7$, $2.2$, and $4$ consecutive packets for the given loss rates. The stability impact of these worst-case packet loss events can be considered as a time delay directly in the feedback of the outer loop. However, assumptions must be made as to the transmission pattern; it is reasonable to assume that data transmission rates are far higher than the sampling frequency of the outer loop, since packet sizes are likely to be very small relative to available WiFi bandwidth. If data is transmitted e.g. $10$ times faster than the controller, $4$ consecutive dropped packets will induce a delay of $40 \si{s}$ in the feedback loop, but even this sizeable lag is less than half the sampling interval of the controller, and thus unlikely to be seen at all.
 
 %\begin{equation}\label{eq:InfLQRHamiltonian}
 %	\mathcal{H}(x(t),u(t),\lambda(t),t)) = \lambda^T(t)\big(Ax(t) + Bu(t)\big) - x^T(t)Qx(t) - u^T(t)Ru(t)

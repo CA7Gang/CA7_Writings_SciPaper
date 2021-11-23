@@ -40,7 +40,7 @@ It is observed that one can obtain more than one spanning tree by choosing $ e_7
 $E_C=\{e_3,e_7\}$, which gives the spanning tree 
 $E_T=\{e_1,e_2,e_4,..,e_6,e_8,..,e_{14}\}$, and the reduced incidence matrix $\bar{H}$ is obtained by choosing the node $ v_{13} $ as reference.\\
 
-In addition to these basic definitions, we require a few other prerequisites. The first are Kirchhoff's laws, which for an open WDN are given by \cite{Jensen}:
+In addition to these basic definitions, we require a few other prerequisites. The first are the boundary conditions imposed by Kirchhoff's laws, which for an open WDN are given by \cite{Jensen}:
 \begin{gather}
 	Hq = d \label{eq:KirchNodeLaw} \\
 	B\Delta p = B H^T p = 0 \wedge B\Delta h = B H^T h = 0 \label{eq:KirchMeshLaw}
@@ -53,7 +53,7 @@ With $ q $ the vector of flows in the edges, $ d $ is the nodal demands, and $p$
 
 Secondly, we require two lemmas pertaining to the spanning tree subspace $H_T$ of $H$: \\
 
-\begin{lemma}\label{lem:TreePartitionLemma}
+\begin{lem}\label{lem:TreePartitionLemma}
 	Let $H_T$ be the incidence matrix partition corresponding to the spanning tree of the graph described by $H$, and let $\bar{H}_T$ be its equivalent with respect to the reduced incidence matrix $\bar{H}$. $\bar{H}_T$ is invertible since a tree is a connected graph with $n-1$ edges \cite{Deo}, and the following holds:
 	
 	\begin{equation}\label{eq:TreePartitionLemma}
@@ -61,27 +61,27 @@ Secondly, we require two lemmas pertaining to the spanning tree subspace $H_T$ o
 	\end{equation}
 	
 	where $\mathbbm{1}$ is a vector of ones and $I_{n-1} \in \mathbb{R}^{n-1 \times n-1}$ is an identity matrix.
-\end{lemma}
+\end{lem}
 
 \newpage
 
-\begin{lemma}\label{lem:EdgeFlowDecomposition}
+\begin{lem}\label{lem:EdgeFlowDecomposition}
 	Let $q \in \mathbb{R}^m$ be the edge flows of a graph with reduced incidence matrix $\bar{H}$ and $n$ nodes. Denote its spanning tree by $T$, let $q_c \in \mathbb{R}^c, \ c = m-n+1$ be the graph's chordal flows, and denote the tree partition of the reduced incidence matrix $\bar{H}_T$. Finally, let $B$ be the graph's fundamental loop matrix, and define $\bar{d} \in \mathbb{R}^{n-1}$ as the vector of non-reference nodal flows. Then the following is true:
 	
 	\begin{equation}\label{eq:EdgeFlowDecomposition}
 		q = B^T q_c +
 		\begin{bmatrix}
-			0_{C \times n-1} \\ \bar{H}_T^{-1} 
+			0_{c \times n-1} \\ \bar{H}_T^{-1} 
 		\end{bmatrix}
 		\bar{d}
 	\end{equation}
-\end{lemma}
+\end{lem}
 
 With these definitions in hand, we move on to modelling of the slow dynamics.
 
 \subsection{Slow Dynamics}\label{subsec:SlowDynamics}
 
-The evolution of pressure in an EWR, assuming only one tank orifice, and defining the positive flow direction as \textit{from} the tank, can be described by the equation \cite{Jensen,Suresh2009}:
+The evolution of pressure $p_\tau$ in an EWR, assuming only one tank orifice, and defining the positive flow direction as \textit{from} the tank, can be described by the equation \cite{Jensen,Suresh2009}:
 
 \begin{gather}\label{eq:TankPressureDyn}
 	\dot{p}_\tau = -\tau d_\tau
@@ -132,11 +132,11 @@ The differential pressure across the $ k^{th} $ pipe is modelled as:
 where $L_k, D_k$ are the length and diameter of the $k$th pipe, while $f,k_f$ are the pipe friction and form loss factors as given in \cite{Swamee2008}.
 
 \textbf{Valve Model:}
-The differential pressure across the $ k^{th} $ valve, assuming a linear valve model, is given by:
+The differential pressure across the $ k^{th} $ valve, assuming a linear-type \cite{Swamee2008}, is given by:
 \begin{equation}\label{eq:ValveModel}
 	\begin{gathered}
-		\Delta p_{k} = \mu_k(q_k) \\ 
-		\mu_k(q_k) = \frac{1}{K_{valve}(\Theta)^2} \cdot |q_k|\cdot q_k
+		\Delta p_{k} = \mu_k(q_k,\Theta) \\ 
+		\mu_k(q_k,\Theta) = \frac{1}{K_{valve}(\Theta)^2} \cdot |q_k|\cdot q_k
 	\end{gathered}
 \end{equation}
 
@@ -148,7 +148,7 @@ The differential pressure across the $ k^{th} $ pump is modelled as:
 		\alpha(q_k,\omega_k) = a_0\cdot \omega_k^2 +  a_1\cdot \omega_k \cdot q_k -a_2\cdot |q_k|\cdot q_k
 	\end{gathered}
 \end{equation}
-Coefficients are found by fitting the pump curves in \cite{GrundfosDatablad}. In practice this we neglect the $ a_1 $ cross term to simplify analysis, as simulations indicate that it can generally be omitted with acceptable resulting accuracy.
+Coefficients are found by fitting the pump curves in \cite{GrundfosDatablad}. In practice we neglect the $ a_1 $ cross term to simplify analysis.
 
 %\begin{table}[thpb]\label{tab:PumpCoeffs}
 %	\centering
@@ -169,7 +169,7 @@ We now introduce the mapping matrices $\bar{F}$ and $\bar{G}$, which are defined
 \begin{equation}\label{eq:FlowDecomposition}
 		q = B^T q_c +
 	\begin{bmatrix}
-		0_{C \times n-1} \\ \bar{H}_T^{-1} 
+		0_{c \times n-1} \\ \bar{H}_T^{-1} 
 	\end{bmatrix}
 	\Big(\bar{F}d_f + \bar{G}d_\tau \Big)
 \end{equation}
@@ -306,9 +306,18 @@ We note that the eigenvalues of $A$ are strictly negative with nonzero real part
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=\linewidth]{Graphics/NominalFlows.pdf}
-	\caption{Comparison of non-linear and linearised model behaviour, $1$-step-ahead prediction}
-	\label{fig:CompNonlinLin}
+	\includegraphics[height = 4cm,width=\linewidth]{Graphics/NominalFlows.pdf}
+	\caption{Comparison of non-linear and linearised model behaviour, $1$-step-ahead prediction at operating point}
+	\label{fig:CompNonLinEQ}
 \end{figure}
 
-Having confirmed the small-signal accuracy of the linearised model, we now move on to design of the control algorithm.
+Evaluating the model away from the linearisation operating point ($\Theta = \{0.7,0.4\} \wedge \omega = \{80,40\}$), we see that the model is still largely accurate:
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[height=4cm,width=\linewidth]{Graphics/DifferentOPFlows.pdf}
+	\caption{Comparison of non-linear and linearised model behaviour, $1$-step-ahead prediction away from operating point}
+	\label{fig:CompNonLinNotEQ}
+\end{figure}
+
+The largest error is with respect to the chord and consumer flows, which is intuitive as the linearised model assumes a constant valve setting. We note a significant error in the tank flow, but also note that this error is constant and therefore trivially compensated for with integral action. Having confirmed the small-signal accuracy of the linearised model, we now move on to design of the control algorithm.

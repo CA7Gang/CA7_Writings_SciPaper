@@ -77,7 +77,8 @@
 \usepackage{bbm}
 %-----------------------------------------%
 \usepackage{hyperref}
-\usepackage{cleveref}
+\usepackage{amsthm}
+\usepackage[capitalise]{cleveref}
 
 \usepackage[]{graphicx}
 \usepackage{tikz}
@@ -92,11 +93,14 @@
 	}
 }
 
-
 % Setup for use of lemmas and theorems
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{corollary}{Corollary}[theorem]
-\newtheorem{lemma}[theorem]{Lemma}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem{conj}[thm]{Conjecture}
 
 % Table stuff
 \usepackage{booktabs}
@@ -251,11 +255,11 @@
 
 
 % *** SUBFIGURE PACKAGES ***
-%\ifCLASSOPTIONcompsoc
-%  \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
-%\else
-%  \usepackage[caption=false,font=footnotesize]{subfig}
-%\fi
+\ifCLASSOPTIONcompsoc
+  \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\else
+  \usepackage[caption=false,font=footnotesize]{subfig}
+\fi
 % subfig.sty, written by Steven Douglas Cochran, is the modern replacement
 % for subfigure.sty, the latter of which is no longer maintained and is
 % incompatible with some LaTeX packages including fixltx2e. However,
@@ -532,14 +536,14 @@ High quality control of Water Distribution Networks (WDN) is critical to reliabl
 \section{System Modelling}\label{sec:SysModel}
 \input{Chapters/SystemModel}
 
-\newpage
 \section{Control Structure}\label{sec:ControlStructure}
 \input{Chapters/ControlStructure}
+
 
 \section{Results}\label{sec:Results}
 \input{Chapters/Results}
 
-
+\newpage
 \section{Conclusion}\label{sec:Conclusion}
 \input{Chapters/Conclusion}
 
