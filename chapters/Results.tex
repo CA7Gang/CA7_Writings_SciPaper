@@ -9,7 +9,7 @@ We first present results pertaining to the VFLQR under the assumption that distu
 	\label{fig:LQRTracking}
 \end{figure}
 
- We now examine the behaviour of the inner loop under two separate step references. Note that these references represent deviations from the equilibrium flows. The PID controllers are limited to the range $\{-66,34\}$, corresponding to the inputs $\{0,100\}$ to the full system, with a back-calculation anti-windup scheme.
+ We now examine the behaviour of the inner loop under two separate step references on \cref{fig:PumpSimulation}. Note that these references represent deviations from the equilibrium flows. The PID controllers are limited to the range $\{-66,34\}$, corresponding to the inputs $\{0,100\}$ to the full system, with a back-calculation anti-windup scheme.
 
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth,height=4cm]{Graphics/PumpSimulation.pdf}
@@ -17,7 +17,7 @@ We first present results pertaining to the VFLQR under the assumption that distu
 	\label{fig:PumpSimulation}
 \end{figure}
 
-The results on \cref{fig:PumpSimulation} show a convergence speed of roughly $40 \si{s}$ and limited ringing as desired. The ringing displayed by $d_1$ can be limited by ramp-limiting reference changes from the outer loop, which should not cause issues as the outer loop is clearly significantly slower than the inner loop. Finally, we evaluate the full cascaded control structure, again under the influence of a time-varying (but perfectly measurable) disturbance.
+The results on \cref{fig:PumpSimulation} show a convergence speed of roughly $40 \si{s}$ and limited ringing as desired. Finally, we evaluate the full cascaded control structure, again under the influence of a time-varying (but perfectly measurable) disturbance.
 
 \begin{figure}[h!]
 	\includegraphics[height=4cm, width=\linewidth]{Graphics/FullSimPressures.pdf}
@@ -33,6 +33,8 @@ The results on \cref{fig:PumpSimulation} show a convergence speed of roughly $40
 
 We note, as before, offset-free tracking. There is some overshoot after the reference change from $p_{ref} = 2 \ \si{bar}$ to $p_{ref} = 5 \ \si{bar}$; this is caused by the clamping of the the pumps to their maximum operating speed when the desired flow reference from the outer loop becomes too large, as the outer loop does not have anti-windup functionality. We note additionally that, as expected, the outer loop compensates for the time-varying disturbance by sign-reversed injection of the disturbance as a control signal. In theory, this means that the outer loop can reject an arbitrary disturbance - as opposed to e.g. only constant or integrating disturbances - so long as it is measurable or estimateable. Furthermore, the steady-state error is bounded from below by the disturbance estimate error insofar as rejecting the disturbance does not saturate any actuators.
 
+
+\textbf{WATCH THIS SPACE FOR REAL RESULTS AND TRUETIME SIMULATIONS OF PACKET LOSS}
 
 
 

@@ -135,11 +135,25 @@ A PI controller is designed (i.e., the D term is $0$) via the root-locus method 
 	C(s) = 1.8\frac{s+0.125}{s}
 \end{equation}
 
-\subsection{Distance-Induced Feedback Delay}\label{subsec:FeedbackDelay}
+\subsection{Outer Loop Stability Under Packet Loss}\label{subsec:PacketLossStability}
 
 Until now we have assumed that there are no meaningful losses or delays attributable to communication between the individual elements of the control system. This assumption is generally counterfactual, as the outer and inner loops of the proposed control structure are likely to be located some physical distance from each other, and may be communicating over WiFi rather than a high-reliability physical medium.
 
-A study by Anmon Sheth et al. \cite{Sheth2007} has examined the real-world packet loss experienced by WiFi-based Long Distance Networks (WiLD) using the MAC $802.11$ protocol. They find negligible\footnote{Under $5\%$ at distances up to $15 \si{km}$} losses in a rural setting, but find significant losses in an urban environment. The loss rate appears to scale exponentially with distance, growing from a worst-case loss rate of $7\%$ at $2\si{km}$ to a worst-case loss rate of $60\%$ at $20\si{km}$. If these losses are modelled as a Poisson distribution, we find $99$th percentile packet loss events of respectively $1.7$, $2.2$, and $4$ consecutive packets for the given loss rates. The stability impact of these worst-case packet loss events can be considered as a time delay directly in the feedback of the outer loop. However, assumptions must be made as to the transmission pattern; it is reasonable to assume that data transmission rates are far higher than the sampling frequency of the outer loop, since packet sizes are likely to be very small relative to available WiFi bandwidth. If data is transmitted e.g. $10$ times faster than the controller, $4$ consecutive dropped packets will induce a delay of $40 \si{s}$ in the feedback loop, but even this sizeable lag is less than half the sampling interval of the controller, and thus unlikely to be seen at all.
+A study by Anmon Sheth et al. \cite{Sheth2007} has examined the real-world packet loss experienced by WiFi-based Long Distance Networks (WiLD) using the MAC $802.11$ protocol. They find negligible\footnote{Under $5\%$ at distances up to $15 \si{km}$} losses in a rural setting, but find significant losses in an urban environment. The loss rate appears to scale exponentially with distance, growing from a worst-case loss rate of $7\%$ at $2\si{km}$, $15\%$ at $8\si{km}$, to $60\%$ at $20\si{km}$. Considering these packet losses as an upper bound $\alpha$ on possible packet loss, Hu and Yan \cite{Hu2007} give a sufficient condition for the stability of the outer loop in the mean-square sense if a Try-Once-Discard transmission protocol is assumed:
+
+\begin{equation}\label{eq:HuStabCondition}
+	\mathcal{S}\Big(\alpha A \otimes A + (1-\alpha)(A-BK) \otimes (A-BK) \Big) < 1
+\end{equation}
+
+where $\mathcal{S}$ denotes the spectral radius - the absolute value of the largest eigenvalue - and $\otimes$ is the Kronecker product. Applying this theorem, we can show that the VFLQR system is stable for the given values of packet loss, with spectral radii of $\{0.9238,0.9271,0.9453\}$. In fact, applying Theorem 6 in \cite{Hu2007}, we can show that the VFLQR system should be stable for \textit{any} value of packet loss, as the largest positive eigenvalue of the matrix:
+
+\begin{equation}\label{eq:VMatrix}
+	\begin{gathered}
+		V = \begin{bmatrix} (S\otimes\hat{S}+\hat{S} \otimes S)(I - S\otimes S)^{-1} & \hat{S}\otimes\hat{S} \\ (I - S\otimes S)^{-1} & 0 \end{bmatrix}
+	\end{gathered}
+\end{equation}
+
+is $\text{max}(\sigma(V)) = 0.81$ and thus $PDM = \frac{1}{\text{max}(\sigma(V))} = 1.24$.
 
 %\begin{equation}\label{eq:InfLQRHamiltonian}
 %	\mathcal{H}(x(t),u(t),\lambda(t),t)) = \lambda^T(t)\big(Ax(t) + Bu(t)\big) - x^T(t)Qx(t) - u^T(t)Ru(t)
