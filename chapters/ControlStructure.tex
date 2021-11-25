@@ -88,7 +88,28 @@ This control policy clearly has tracking as $\zeta(k+1) = 0$ implies $y(k+1)-r(k
 	u(k) = \sum_{i=1}^{k} \tilde{u}^*(k) - B^\dagger \mathcal{B}\delta(k)
 \end{equation}
 
-where $B^\dagger$ is the Moore-Penrose pseudoinverse of $B$ and $\mathcal{B}$ is the disturbance input matrix.
+where $B^\dagger$ is the Moore-Penrose pseudoinverse of $B$ and $\mathcal{B}$ is the disturbance input matrix. The value of this disturbance can be estimated in one of two ways depending on whether a general model of the disturbance is known. If no model is assumed, and assuming that $\delta(k) \approx \delta(k+1)$, \cref{eq:TankPressureDyn} can be manipulated to yield:
+
+\begin{equation}\label{eq:AgnosticDisturbanceEstimation}
+	\hat{d}_c = \mathcal{B}^\dagger (\Delta p(k) - Bd_p(k))
+\end{equation}
+
+This scheme, however, clearly maps any measurement noise directly into $\hat{d}_c$. As an alternative, we can exploit the knowledge that consumer demand is often approximately cosinusoidal, and build a disturbance estimator based on the model $\hat{d}_c = \beta + \alpha\cos(\omega t)$, which can be represented by the state-space model:
+
+\begin{equation}\label{eq:TheisticDisturbanceEstimator}
+	\begin{gathered}
+		\dot{x} = A_\delta x =  \begin{bmatrix}0 & 0 & 0 \\ 0 & 0 & -\omega \\ 0 & \omega & 0	\end{bmatrix}x \\
+		\hat{d}_c = C_\delta x = \begin{bmatrix} 1 & 1 & 0 \end{bmatrix} x
+	\end{gathered}
+\end{equation}
+
+where $x = \begin{bmatrix}\beta & \alpha \cos(\omega t) & \alpha \sin(\omega t)\end{bmatrix}^T$. If this is discretised with Euler's method, the state equation becomes:
+
+\begin{equation}\label{eq:TheisticDisturbanceEstimatorDiscrete}
+	x(k+1) = \Big(I_{n\times n} + A_\delta t_s \Big) x(k) = \mathcal{A}_\delta x(k)
+\end{equation}
+
+And a discrete-time Kalman filter can then be constructed from $\{\mathcal{A}_\delta,C_\delta\}$ and appropriate noise models.
 
 \subsection{Inner Loop}\label{subsec:InnerLoop}
 
@@ -102,12 +123,10 @@ which can be shown to be approximately diagonal as per \Cref{fig:BodeMagDelayPlo
 
 \begin{figure}[h!]
  	\centering
- 	\includegraphics[width=\linewidth,height=4cm]{Graphics/BodeMagDelayPlot.pdf}
+ 	\includegraphics[width=\linewidth,height=4cm]{Graphics/PumpMagPlot.pdf}
  	\caption{Transfer matrix magnitude plots, output delay included}
  	\label{fig:BodeMagDelayPlot}
 \end{figure}
-
-\newpage
 
 On account of this the PID controllers for pump speeds $\omega_1$ and $\omega_2$ can be designed as decentralised SISO controllers without decoupling. Their poles and zeros are respectively:
 
@@ -145,15 +164,17 @@ A study by Anmon Sheth et al. \cite{Sheth2007} has examined the real-world packe
 	\mathcal{S}\Big(\alpha A \otimes A + (1-\alpha)(A-BK) \otimes (A-BK) \Big) < 1
 \end{equation}
 
-where $\mathcal{S}$ denotes the spectral radius - the absolute value of the largest eigenvalue - and $\otimes$ is the Kronecker product. Applying this theorem, we can show that the VFLQR system is stable for the given values of packet loss, with spectral radii of $\{0.9238,0.9271,0.9453\}$. In fact, applying Theorem 6 in \cite{Hu2007}, we can show that the VFLQR system should be stable for \textit{any} value of packet loss, as the largest positive eigenvalue of the matrix:
+where $\mathcal{S}$ denotes the spectral radius - the absolute value of the largest eigenvalue - and $\otimes$ is the Kronecker product. Applying this theorem, we can show that the VFLQR system is stable for the given values of packet loss, with spectral radii of $\{0.9238,0.9271,0.9453\}$. In fact, we can show that the VFLQR system should be stable for \textit{any} value of packet loss. Assuming that the nominal system $A-BK$ is stable, applying Theorem 6 in \cite{Hu2007} gives the upper stability bound $PDM$ as: 
 
 \begin{equation}\label{eq:VMatrix}
 	\begin{gathered}
-		V = \begin{bmatrix} (S\otimes\hat{S}+\hat{S} \otimes S)(I - S\otimes S)^{-1} & \hat{S}\otimes\hat{S} \\ (I - S\otimes S)^{-1} & 0 \end{bmatrix}
+		PDM = \frac{1}{\text{max}(\sigma(V))} \\
+		V = \begin{bmatrix} (S\otimes\hat{S}+\hat{S} \otimes S)(I - S\otimes S)^{-1} & \hat{S}\otimes\hat{S} \\ (I - S\otimes S)^{-1} & 0 \end{bmatrix} \\
+		S = \left(A-BK\right) \otimes \left(A-BK\right), \quad \hat{S} = A \otimes A - S
 	\end{gathered}
 \end{equation}
 
-is $\text{max}(\sigma(V)) = 0.81$ and thus $PDM = \frac{1}{\text{max}(\sigma(V))} = 1.24$.
+Where $\text{max}(\sigma(V))$ is the largest positive eigenvalue of $V$. In our case this is $\text{max}(\sigma(V)) = 0.81$ and thus $PDM = \frac{1}{\text{max}(\sigma(V))} = 1.24$, implying stability for arbitrary large packet loss.
 
 %\begin{equation}\label{eq:InfLQRHamiltonian}
 %	\mathcal{H}(x(t),u(t),\lambda(t),t)) = \lambda^T(t)\big(Ax(t) + Bu(t)\big) - x^T(t)Qx(t) - u^T(t)Ru(t)
