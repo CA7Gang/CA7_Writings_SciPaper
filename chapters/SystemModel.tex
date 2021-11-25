@@ -2,12 +2,12 @@ The WDN of concern in this paper is a two-pump, two-consumer, single-EWR system 
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[height = 4cm,width=\linewidth]{Graphics/WDNModel.pdf}
+	\includegraphics[width=0.5\linewidth]{Graphics/WDNModel.pdf}
 	\caption{Schematic of the WDN under study.}
 	\label{fig:WDNModel}
 \end{figure}
 
-As described in \Cref{sec:Introduction}, the dynamics of a WDN can be separated into a tank slow pressure regime and a fast flow regime. We use a directed graph model of the WDN corresponding to \cref{fig:tikzWDNGraph}, with the vertices $\{v_1,..,v_n\}$,  $\{e_1,..,e_m\}$, nodal demands and nodal heights $d_i, h_i$ and edge flows $q_i$:
+As described in \Cref{sec:Introduction}, the dynamics of a WDN can be separated into a tank slow pressure regime and a fast flow regime. We use a directed graph model of the WDN corresponding to \cref{fig:tikzWDNGraph}, with the vertices $\{v_1,..,v_n\}$, edges $\{e_1,..,e_m\}$, nodal demands and nodal heights $d_i, h_i$ and edge flows $q_i$:
 
 \begin{figure}[h!]
 	\centering
@@ -17,7 +17,7 @@ As described in \Cref{sec:Introduction}, the dynamics of a WDN can be separated 
 	\label{fig:tikzWDNGraph}
 \end{figure}  
 
-Applying standard graph theory - see e.g. \cite{Deo} - to the graph, we obtain an incidence matrix $H$ and loop matrix $B$ with the chords $E_C=\{e_3,e_7\}$ are chosen.
+Applying standard graph theory - see e.g. \cite{Deo} - to the graph, we obtain an incidence matrix $H$ and loop matrix $B$ with the chords $E_C=\{e_3,e_7\}$ chosen.
 
 %\begin{equation*}
 %	H_{i,j} = \begin{cases}
@@ -43,7 +43,7 @@ In addition to these graph-related definitions, we require a few boundary condit
 	B\Delta p = B H^T p = 0 \wedge B\Delta h = B H^T h = 0 \label{eq:KirchMeshLaw}
 \end{gather} 
 
-With $q$ the vector of flows in the edges, $d$ is the nodal demands, and $p$ the nodal pressures. Furthermore, mass conservation is assumed. This implies that there can at most be $n-1$ independent nodal demands, i.e.:
+Where $p$ is the vector of nodal pressures. Furthermore, mass conservation is assumed. This implies that there can at most be $n-1$ independent nodal demands, i.e.:
 
 \begin{equation}\label{eq:MassConservation}
 	d_n = -\sum_{i=1}^{n-1}d_i
@@ -116,7 +116,7 @@ In contrast to the slow dynamics, which are effected exclusively by the mass con
 	\Delta p = \mathcal{J}\dot{q} + \lambda(q) + \mu(q,\Theta) + \alpha(q,\omega) + \Delta z
 \end{equation}
 
-where $\mathcal{J},\lambda$ apply only to pipes, $\mu$ applies only to valves, $\alpha$ applies only to pumps, and $\Delta z$ is the pressure change induced by height difference along the edge traverse. $q,\Theta,\omega$ are respectively the flow, valve opening degree, and pump rotational speed at the edge in question. We refer to \cite{Swamee2008,Jensen} for a detailed breakdown of each component model.
+where $\mathcal{J},\lambda$ apply only to pipes, $\mu$ applies only to valves, $\alpha$ applies only to pumps, and $\Delta z$ is the pressure change induced by height difference along the edge traverse. $q,\Theta,\omega$ are respectively the flow, valve opening degree, and pump rotational speed at the edge in question. We refer to \cite{Swamee2008,KallesoePhD} for a detailed breakdown of each component model.
 
 %\textbf{Pipe Model:}
 %The differential pressure across the $ k^{th} $ pipe is modelled as:
@@ -256,7 +256,7 @@ where $q_n = \{q_c, d_f, d_\tau\}^T$and the matrices $\Phi, \Psi, \mathcal{I}$ a
 
 \subsection{Linearised Model}
 
-The full fast dynamics \cref{eq:NonLinearModelWithTank} are nonlinear, depending on both the square of several variables. This makes the model unsuitable for use with the control methods employed in this paper, and a linearisation is therefore necessary. This linearisation is performed by taking the $1$st-order Taylor expansion of \cref{eq:NonLinearModelWithTank} at an equilibrium point $x_0$ such that:
+The full fast dynamics \cref{eq:NonLinearModelWithTank} are nonlinear with respect to several variables. This makes the model unsuitable for use with the control methods employed in this paper, and a linearisation is therefore necessary. This linearisation is performed by taking the $1$st-order Taylor expansion of \cref{eq:NonLinearModelWithTank} at an equilibrium point $x_0$ such that:
 
 \begin{equation}\label{eq:TaylorSeries}
 	\dot{x} \approx f(x_0) + \nabla f\bigg\rvert_{x_0} (x-x_0)
@@ -274,7 +274,10 @@ We note that it can be shown that neglecting $\frac{\partial f}{\partial \Theta}
 which exactly fits a classical linear state-space model structure of:
 
 \begin{equation}\label{eq:}
-	\dot{\tilde{q}}_n = A\tilde{q}_n + B \tilde{\omega}_n
+	\begin{gathered}
+		\dot{\tilde{q}}_n = A\tilde{q}_n + B \tilde{\omega}_n \\
+		\tilde{d}_p = C \tilde{q}_n
+	\end{gathered}
 \end{equation}
 
 Linearising \cref{eq:NonLinearModelWithTank} at its lone equilibrium point results in the following approximation:
@@ -305,7 +308,7 @@ Linearising \cref{eq:NonLinearModelWithTank} at its lone equilibrium point resul
 \end{gathered}
 \end{equation}
 
-We note that the eigenvalues of $A$ are strictly negative with nonzero real part, which means that the equilibrium point is stable and hyperbolic \cite{Khalil}, and resultingly by the Hartman-Grobman theorem the trajectories of the nonlinear system near the equilibrium resemble the linearisation exactly \cite{Perko2001}. This can be confirmed by co-simulation of the full nonlinear model with the linear model as a $1$-step-ahead predictor:
+We note that the eigenvalues of $A$ are strictly negative with nonzero real part, which means that the equilibrium point is stable and hyperbolic \cite{Khalil}, and resultingly by the Hartman-Grobman theorem the linear model is exact in some region around the equilibrium \cite{Perko2001}. This can be confirmed by co-simulation of the full nonlinear model with the linear model as a $1$-step-ahead predictor:
 
 
 \begin{figure}[h]
