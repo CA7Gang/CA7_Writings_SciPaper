@@ -110,11 +110,16 @@ where $x = \begin{bmatrix}\beta & \alpha \cos(\omega t) & \alpha \sin(\omega t)\
 	x(k+1) = \Big(I_{n\times n} + A_\delta t_s \Big) x(k) = \mathcal{A}_\delta x(k)
 \end{equation}
 
-And a discrete-time Kalman filter can then be constructed from $\{\mathcal{A}_\delta,C_\delta\}$ and appropriate noise models. \Cref{eq:TheisticDisturbanceEstimator} can be extended to the vector case by block-diagonal concatenation of several signal models, i.e. in the 2-dimensional case:
+And a discrete-time Kalman filter can then be constructed from $\{\mathcal{A}_\delta,C_\delta\}$ and appropriate noise models. \Cref{eq:TheisticDisturbanceEstimator} can be extended to the harmonic case by block-diagonal concatenation of several signal models, i.e. in the 2-harmonic case:
 
 \begin{equation}\label{eq:DisturbanceVectorCase}
-		\begin{bmatrix}\dot{x}_1 \\ \dot{x}_2 \end{bmatrix} = \begin{bmatrix}A_\delta & 0 \\ 0 & A_\delta \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix},
-		 \quad \begin{bmatrix}y_1 \\ y_2 \end{bmatrix} = \begin{bmatrix}C_\delta & 0 \\ 0 & C_\delta \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}
+	\begin{gathered}
+		\begin{bmatrix} \beta \\ \dot{x}_1 \\ \dot{x}_2 \end{bmatrix} = \begin{bmatrix} A_{\delta_1} & 0 \\ 0 & A_{\delta_2} \end{bmatrix} \begin{bmatrix}\beta \\ x_1 \\ x_2 \end{bmatrix},
+		 \quad y = C_\delta \begin{bmatrix}\beta \\ x_1 \\ x_2 \end{bmatrix} \\
+		 x_1, x_2 \in \mathbb{R}^{2\times1} \\
+		 A_{\delta_1} \in \mathbb{R}^{3\times3}, \quad \forall i \neq 1: \ A_{\delta_i} \in \mathbb{R}^{2\times2} \\
+		 C_\delta \in \mathbb{R}^{1\times2n+1}
+	\end{gathered}
 \end{equation}
 
 
