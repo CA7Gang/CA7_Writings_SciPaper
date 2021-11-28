@@ -17,33 +17,15 @@ As described in \Cref{sec:Introduction}, the dynamics of a WDN can be separated 
 	\label{fig:tikzWDNGraph}
 \end{figure}  
 
-Applying standard graph theory - see e.g. \cite{Deo} - to the graph, we obtain an incidence matrix $H$ and loop matrix $B$ with the chords $E_C=\{e_3,e_7\}$ chosen.
+Applying standard graph theory - see e.g. Deo \cite{Deo} - we obtain an incidence matrix $H$ and loop matrix $B$ with the chords $E_C=\{e_3,e_7\}$ chosen. We furthermore introduce the notation $H_T$ for the columns of $H$ in the spanning tree $E_T=\{e_1,e_2,e_4,..,e_6,e_8,..,e_{14}\}$, while $H_C$ is given by the columns of $H$ in $E_C=\{e_3,e_7\}$. The reduced incidence matrix $\bar{H}$ is obtained by choosing the node $ v_{13} $ as reference and eliminating the corresponding row of $H$.
 
-%\begin{equation*}
-%	H_{i,j} = \begin{cases}
-%		-1 & \text{If the $j^{th}$ edge enters the $i^{th}$ node} \\
-%		0 & \text{If the $j^{th}$ edge is unconnected to the $i^{th}$ node} \\
-%		1 & \text{If the $j^{th}$ edge leaves the $i^{th}$ node}
-%	\end{cases}
-%\end{equation*} %Description of the incident matrix
-%
-%\begin{equation*}
-%	B_{i,j} = \begin{cases}
-%		1 & \text{If the direction of the $ i^{th} $ loop and the} \\& \text{$j^{th}$ edge agree}\\
-%		-1 & \text{If the direction of the $ i^{th} $ loop and the} \\& \text{$j^{th}$ edge do not agree}\\
-%		0 & \text{If the $ i^{th} $ loop does not include the $ j^{th} $ edge}\\
-%	\end{cases}
-%\end{equation*}
-
-We furthermore introduce the notation $H_T$ for the columns of $H$ in the spanning tree $E_T=\{e_1,e_2,e_4,..,e_6,e_8,..,e_{14}\}$, while $H_C$ is given by the columns of $H$ in $E_C=\{e_3,e_7\}$. The reduced incidence matrix $\bar{H}$ is obtained by choosing the node $ v_{13} $ as reference and eliminating the corresponding row of $H$.
-
-In addition to these graph-related definitions, we require a few boundary conditions imposed by Kirchhoff's laws, which for an open WDN are given \cite{Jensen} by:
+In addition to these graph-related definitions, we require boundary conditions imposed by Kirchhoff's laws, which for an open WDN are given \cite{Jensen} by:
 \begin{gather}
 	Hq = d \label{eq:KirchNodeLaw} \\
 	B\Delta p = B H^T p = 0 \wedge B\Delta h = B H^T h = 0 \label{eq:KirchMeshLaw}
 \end{gather} 
 
-Where $p$ is the vector of nodal pressures. Furthermore, mass conservation is assumed. This implies that there can at most be $n-1$ independent nodal demands, i.e.:
+Where $p$ is the vector of nodal pressures. Furthermore, mass conservation is assumed at the graph boundary. This implies that there can at most be $n-1$ independent nodal demands, i.e.:
 
 \begin{equation}\label{eq:MassConservation}
 	d_n = -\sum_{i=1}^{n-1}d_i
@@ -79,7 +61,7 @@ Where $p$ is the vector of nodal pressures. Furthermore, mass conservation is as
 
 \subsection{Slow Dynamics}\label{subsec:SlowDynamics}
 
-The evolution of pressure $p_\tau$ in an EWR, assuming only one tank orifice, and defining the positive flow direction as \textit{from} the tank, can be described \cite{Jensen,Suresh2009} by the equation:
+The evolution of pressure $p_\tau$ in an EWR, assuming only one tank orifice, and defining the positive flow direction as \textit{from} the tank, can be described \cite{Kallesoe2017} by the equation:
 
 \begin{gather}\label{eq:TankPressureDyn}
 	\dot{p}_\tau = -\tau d_\tau
@@ -167,13 +149,10 @@ where $\mathcal{J},\lambda$ apply only to pipes, $\mu$ applies only to valves, $
 We now introduce the open-node and tank mapping matrices ${F}$ and ${G}$, which are defined such that the edge flows can be written as:
 
 \begin{equation}\label{eq:FlowDecomposition}
-	\begin{split}
-		q &=	B^T q_c + \begin{bmatrix}0_{c \times n-1} \\ {H}_T^{-1} \end{bmatrix} {d} \\
-		 &= B^T q_c +	\begin{bmatrix} 0_{c \times n-1} \\ {H}_T^{-1} \end{bmatrix}\Big({F}d_f + {G}d_\tau \Big)
-	\end{split}
+		q = B^T q_c +	\begin{bmatrix} 0_{c \times n-1} \\ {H}_T^{-1} \end{bmatrix}\Big({F}d_f + {G}d_\tau \Big)
 \end{equation}
 
-where $d$ is the vector of total nodal demand, $d_f$ is the vector of non-tank demands at the boundary, and $d_\tau$ is the vector of tank demands at the boundary. We can then state the full nonlinear model of the fast dynamics as \cite{Rathore1030,Jensen}:
+where $q_c$ are the flows in the chords, $d_f$ is the vertex-ordered vector of non-tank demands at the boundary, and $d_\tau$ is the vector of tank demands at the boundary. We can then state the full nonlinear model of the fast dynamics as \cite{Rathore1030,Jensen}:
 
 
 
@@ -262,7 +241,7 @@ The full fast dynamics \cref{eq:NonLinearModelWithTank} are nonlinear with respe
 	\dot{x} \approx f(x_0) + \nabla f\bigg\rvert_{x_0} (x-x_0)
 \end{equation}
 
-We note that it can be shown that neglecting $\frac{\partial f}{\partial \Theta}$ and $\frac{\partial f}{\partial p_\tau}$ only leads to a constant error at steady-state under the assumption that their dynamics are far slower than $\omega$ and $q$. Thus, \cref{eq:TaylorSeries} can be reduced to:
+We note that it can be shown that neglecting $\frac{\partial f}{\partial \Theta}$ and $\frac{\partial f}{\partial p_\tau}$ leads to a constant error at steady-state under the assumption that their dynamics are far slower than $\omega$ and $q$. Thus, \cref{eq:TaylorSeries} can be reduced to:
 
 \begin{equation}\label{eq:TaylorSeriesSimple}
 \begin{gathered}
