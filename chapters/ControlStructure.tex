@@ -4,7 +4,7 @@ The structure of the proposed control strategy is presented in \cref{fig:tikzCon
 	\centering
 	\resizebox{\columnwidth}{!}{
 	\input{TikzFigures/TikzControlStructure}}
-	\caption{Control strategy including control for fast and slow dynamics}
+	\caption{Control strategy including control for fast and slow dynamics.}
 	\label{fig:tikzControlStrat}
 \end{figure}
 
@@ -69,7 +69,7 @@ where the constraining dynamics are given by:
 
 and the optimal control policy becomes:
 
-\begin{equation}\label{eq:OptimalVFLQRPolicy}
+\begin{equation}\label{eq:OptimalVF-LQRPolicy}
 \begin{gathered}
 \tilde{u}^*(k)  = -\tilde{K}\tilde{x}^*(k) \\
 \tilde{K} = (\tilde{B}^TP\tilde{B}-R)^{-1}(\tilde{B}^TP\tilde{A}) \\
@@ -83,7 +83,7 @@ where $P$ is now the solution to the \textit{discrete} algebraic Riccatti equati
 	-Q = \tilde{A}^TP\tilde{A} - P - (\tilde{A}^TP\tilde{B})(\tilde{B}^TP\tilde{B}+R)^{-1}(\tilde{B}^TP\tilde{A})
 \end{equation}
 
-This control policy clearly has tracking as $\zeta(k+1) = 0$ implies $y(k+1)-r(k+1) = 0$, and has integral action by virtue of its incremental form. However, it still lacks disturbance rejection. Assuming that we are only concerned with optimal control of the disturbance-free subsystem, complete rejection of the state disturbance $\delta(k)$ can then be achieved by augmenting \cref{eq:OptimalVFLQRPolicy} \cite{Singh2017}:
+This control policy clearly has tracking as $\zeta(k+1) = 0$ implies $y(k+1)-r(k+1) = 0$, and has integral action by virtue of its incremental form. However, it still lacks disturbance rejection. Assuming that we are only concerned with optimal control of the disturbance-free subsystem, complete rejection of the state disturbance $\delta(k)$ can then be achieved by augmenting \cref{eq:OptimalVF-LQRPolicy} \cite{Singh2017}:
 
 \begin{equation}
 	u(k) = \sum_{i=1}^{k} \tilde{u}^*(k) - B^\dagger \mathcal{B}\delta(k)
@@ -125,18 +125,18 @@ And a discrete-time Kalman filter can then be constructed from $\{\mathcal{A}_\d
 
 \subsection{Inner Loop}\label{subsec:InnerLoop}
 
-We now address the inner loop and its PID controllers. The model used for their design is the state-space model of the fast dynamics given in \cref{eq:LinearisedModelWithTank}, with a Padé approximation of a $4$-second output delay included. This state-space system with output delay can be converted into the frequency-domain transfer matrix $G(s)$:
+We now address the inner loop and its PID controllers. The model used for their design is the state-space model of the fast dynamics given in \cref{eq:LinearisedModelWithTank}, with a Padé approximation of a $4$-second output delay $T_{delay}$ included. This state-space system with output delay can be converted into the frequency-domain transfer matrix $G(s)$:
 
 \begin{equation}\label{eq:TransferMatrix}
 	G(s) = \begin{bmatrix} G_{11}(s) & G_{12}(s) \\ G_{21}(s) & G_{22}(s)\end{bmatrix}
 \end{equation}
 
-which can be shown to be approximately diagonal as per \Cref{fig:BodeMagDelayPlot}:
+which can be shown to be approximately diagonal as per \cref{fig:BodeMagDelayPlot}:
 
 \begin{figure}[h!]
  	\centering
  	\includegraphics[width=\linewidth,height=4cm]{Graphics/PumpMagPlot.pdf}
- 	\caption{Transfer matrix magnitude plots, output delay included}
+ 	\caption{Transfer matrix magnitude plots, output delay included.}
  	\label{fig:BodeMagDelayPlot}
 \end{figure}
 
@@ -176,7 +176,7 @@ A study by Anmon Sheth et al. \cite{Sheth2007} has examined the real-world packe
 	\mathcal{S}\Big(\alpha A \otimes A + (1-\alpha)(A-BK) \otimes (A-BK) \Big) < 1
 \end{equation}
 
-where $\mathcal{S}$ is the spectral radius and $\otimes$ is the Kronecker product. Applying this theorem, we can show that the VFLQR system is stable for the given values of packet loss, with spectral radii of $\{0.9238,0.9271,0.9453\}$. In fact, we can show that the VFLQR system should be stable for \textit{any} value of packet loss. Assuming that the nominal system $A-BK$ is stable, applying Theorem 6 in \cite{Hu2007} gives the upper stability bound $PDM$ as: 
+where $\mathcal{S}$ is the spectral radius and $\otimes$ is the Kronecker product. Applying this theorem, we can show that the VF-LQR system is stable for the given values of packet loss, with spectral radii of $\{0.9238,0.9271,0.9453\}$. In fact, we can show that the VF-LQR system should be stable for \textit{any} value of packet loss. Assuming that the nominal system $A-BK$ is stable, applying Theorem 6 in \cite{Hu2007} gives the upper stability bound $PDM$ as: 
 
 \begin{equation}\label{eq:VMatrix}
 	\begin{gathered}

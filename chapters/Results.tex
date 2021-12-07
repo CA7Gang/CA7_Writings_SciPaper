@@ -1,11 +1,11 @@
 To validate the feasibility of the proposed control structure, the individual controllers are tested independently, and the full cascaded structure is then tested in concert. The small-signal model is used for all simulation tests; while this is inherently less accurate than testing against the full nonlinear model \cref{eq:NonLinearModelWithTank}, this model's stiffness requires a sampling interval that, considering the computational complexity of each timestep and the timescale of the dynamics, is impracticable. \textbf{NOTE: Simulation results will be replaced with laboratory results in final draft. No results are presented with respect to the disturbance estimators or packet loss as we are still figuring things out}.
 
-We first present results pertaining to the VFLQR. The controller is tested against nominal conditions, a variety of non-nominal time constants, and against a constant output disturbance. In each case the controls are clamped corresponding to the provided pump curves \cite{GrundfosDatablad}, the system is subjected to a varying state disturbance, and a sampling time of $t_s = 10\si{min}$ is assumed. The results can be seen on \cref{fig:LQRTracking}, displaying good tracking performance in each case; the disturbance is completely rejected, and the system tracks the reference. In all cases $Q = \left(\tilde{C}^T\tilde{C}\right)$ and $R = \text{diag}(0.1)$; the former guarantees an exponentially stable closed-loop system \cite{Liberzon2012}.
+We first present results pertaining to the VF-LQR. The controller is tested against nominal conditions, a variety of non-nominal time constants, and against a constant output disturbance. In each case the controls are clamped corresponding to the provided pump curves \cite{GrundfosDatablad}, the system is subjected to a varying state disturbance, and a sampling time of $t_s = 10\si{min}$ is assumed. The results can be seen on \cref{fig:LQRTracking}, displaying good tracking performance in each case; the disturbance is completely rejected, and the system tracks the reference. In all cases $Q = \left(\tilde{C}^T\tilde{C}\right)$ and $R = \text{diag}(0.1)$; the former guarantees an exponentially stable closed-loop system \cite{Liberzon2012}.
 
 
 \begin{figure}[h!]
 	\includegraphics[height=4cm, width=\linewidth]{Graphics/LQRTracking.pdf}
-	\caption{Outer loop simulation}
+	\caption{Outer loop simulation.}
 	\label{fig:LQRTracking}
 \end{figure}
 
@@ -13,7 +13,7 @@ We first present results pertaining to the VFLQR. The controller is tested again
 
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth,height=4cm]{Graphics/PumpSimulation.pdf}
-	\caption{Inner loop simulation}
+	\caption{Inner loop simulation.}
 	\label{fig:PumpSimulation}
 \end{figure}
 
@@ -21,13 +21,13 @@ The results on \cref{fig:PumpSimulation} show a convergence speed of roughly $40
 
 \begin{figure}[h!]
 	\includegraphics[height=4cm, width=\linewidth]{Graphics/FullSimPressures.pdf}
-	\caption{Outer loop, cascaded simulation}
+	\caption{Outer loop, cascaded simulation.}
 	\label{fig:FullSimPressure}
 \end{figure}
 
 \begin{figure}[h!]
 	\includegraphics[height=4cm, width=\linewidth]{Graphics/FullSimFlows.pdf}
-	\caption{Inner loop, cascaded simulation}
+	\caption{Inner loop, cascaded simulation.}
 	\label{fig:FullSimFlows}
 \end{figure}
 
