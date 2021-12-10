@@ -1,37 +1,41 @@
-To validate the feasibility of the proposed control structure, the individual controllers are tested independently, and the full cascaded structure is then tested in concert. The small-signal model is used for all simulation tests; while this is inherently less accurate than testing against the full nonlinear model \cref{eq:NonLinearModelWithTank}, this model's stiffness requires a sampling interval that, considering the computational complexity of each timestep and the timescale of the dynamics, is impracticable. \textbf{NOTE: Simulation results will be replaced with laboratory results in final draft. No results are presented with respect to the disturbance estimators or packet loss as we are still figuring things out}.
+The viability of the proposed control structure is validated in the Aalborg University Smart Water Infrastructure Laboratory (SWIL). This modular laboratory consists of a number of units pumping units (PU), consumer units (CU), and piping units (PiU) that can be used for small-scale emulation of a real WDN.
 
-We first present results pertaining to the VF-LQR. The controller is tested against nominal conditions, a variety of non-nominal time constants, and against a constant output disturbance. In each case the controls are clamped corresponding to the provided pump curves \cite{GrundfosDatablad}, the system is subjected to a varying state disturbance, and a sampling time of $t_s = 10\si{min}$ is assumed. The results can be seen on \cref{fig:LQRTracking}, displaying good tracking performance in each case; the disturbance is completely rejected, and the system tracks the reference. In all cases $Q = \left(\tilde{C}^T\tilde{C}\right)$ and $R = \text{diag}(0.1)$; the former guarantees an exponentially stable closed-loop system \cite{Liberzon2012}.
+\begin{figure}[h!]
+	\includegraphics[height=4cm, width=\linewidth]{Graphics/SWIL.pdf}
+	\caption{Picture of the AAU SWIL}
+	\label{fig:AAUSWIL}
+\end{figure}
+
+The network topology in \cref{fig:WDNModel} is emulated via two PUs, a CU with two adjustable one-way valves each emulating a consumer, and a CU with an open bidirectional valve acting as the EWR, interconnected via two PiUs. Geodesic heights are emulated by pressuring the CUs. Experiments run for $12$ hours, with consumer demand curves based on real data and compressed to a fundamental frequency of $4$ hours such that each experiment corresponds to $3$ days. The controller attempts to follow a constant level reference throughout, starting $15 \si{mm}$ beneath it. After $4$ hours, a system leakage is simulated by fully opening the consumer valves for $30$ seconds. After $8$ hours, $50\%$ packet loss is introduced in the outer loop, which operates on a simulated TOD protocol. The tank level is seen on \cref{fig:OuterLoop}, while a snapshot of pump behaviour is seen on \cref{fig:InnerLoop}. The disturbance estimation scheme and true consumer flows can be seen on \cref{fig:DisturbanceEstimation}, with a zoomed-in view around the leakage seen on \cref{fig:Leakage}.
+
+%We first present results pertaining to the VF-LQR. The controller is tested against nominal conditions, a variety of non-nominal time constants, and against a constant output disturbance. In each case the controls are clamped corresponding to the provided pump curves \cite{GrundfosDatablad}, the system is subjected to a varying state disturbance, and a sampling time of $t_s = 10\si{min}$ is assumed. The results can be seen on \cref{fig:LQRTracking}, displaying good tracking performance in each case; the disturbance is completely rejected, and the system tracks the reference. In all cases $Q = \left(\tilde{C}^T\tilde{C}\right)$ and $R = \text{diag}(0.1)$; the former guarantees an exponentially stable closed-loop system \cite{Liberzon2012}.
 
 
 \begin{figure}[h!]
-	\includegraphics[height=4cm, width=\linewidth]{Graphics/LQRTracking.pdf}
-	\caption{Outer loop simulation.}
-	\label{fig:LQRTracking}
+	\includegraphics[height=4cm, width=\linewidth]{Graphics/OuterLoop.pdf}
+	\caption{Outer loop.}
+	\label{fig:OuterLoop}
 \end{figure}
 
- We now examine the behaviour of the inner loop under two separate step references on \cref{fig:PumpSimulation}. The PID controllers are limited to the range $\{-66,34\}$, corresponding to the inputs $\{0,100\}$ to the full system, with a back-calculation anti-windup scheme.
 
 \begin{figure}[h!]
-	\includegraphics[width=\linewidth,height=4cm]{Graphics/PumpSimulation.pdf}
-	\caption{Inner loop simulation.}
-	\label{fig:PumpSimulation}
+	\includegraphics[width=\linewidth,height=4cm]{Graphics/InnerLoop.pdf}
+	\caption{Inner loop.}
+	\label{fig:InnerLoop}
 \end{figure}
 
-The results on \cref{fig:PumpSimulation} show a convergence speed of roughly $40 \si{s}$ and limited ringing as desired. Finally, we evaluate the full cascaded control structure, again under the influence of a time-varying disturbance.
 
 \begin{figure}[h!]
-	\includegraphics[height=4cm, width=\linewidth]{Graphics/FullSimPressures.pdf}
-	\caption{Outer loop, cascaded simulation.}
-	\label{fig:FullSimPressure}
+	\includegraphics[height=4cm, width=\linewidth]{Graphics/DisturbanceEstimation.pdf}
+	\caption{Consumer disturbance estimation.}
+	\label{fig:DisturbanceEstimation}
 \end{figure}
 
 \begin{figure}[h!]
-	\includegraphics[height=4cm, width=\linewidth]{Graphics/FullSimFlows.pdf}
-	\caption{Inner loop, cascaded simulation.}
-	\label{fig:FullSimFlows}
+	\includegraphics[height=4cm, width=\linewidth]{Graphics/LeakageDetection.pdf}
+	\caption{Leakage detection.}
+	\label{fig:Leakage}
 \end{figure}
-
-We note, as before, offset-free tracking. There is some overshoot after the reference change from $p_{ref} = 2 \ \si{bar}$ to $p_{ref} = 5 \ \si{bar}$; this is caused by the clamping of the the pumps to their maximum operating speed when the desired flow reference from the outer loop becomes too large, as the outer loop does not have anti-windup functionality. We note additionally that, as expected, the outer loop compensates for the time-varying disturbance by sign-reversed injection of the disturbance as a control signal.
 
 
 
