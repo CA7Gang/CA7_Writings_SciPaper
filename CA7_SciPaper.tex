@@ -8,7 +8,7 @@
 %% for current contact information.
 %%
 %% This is a skeleton file demonstrating the use of IEEEtran.cls
-%% (requires IEEEtran.cls version 1.8b or later) with an IEEE
+%% (requires IEEEtran.cls version 1.8b or later) with an IEEE5
 %% conference paper.
 %%
 %% Support sites:
@@ -62,11 +62,51 @@
 
 % *** STUFF WE ADD THAT THE PACKAGE SHOULD HAVE HAD ***
 
+
+
+
+%Math Packages
 \usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{kbordermatrix}
+\renewcommand{\kbldelim}{[}% Left delimiter
+\renewcommand{\kbrdelim}{]}% Right delimiter
+\usepackage{siunitx}
+
+\usepackage{bbm}
+%-----------------------------------------%
 \usepackage{hyperref}
-\usepackage{cleveref}
+\usepackage{amsthm}
 
+\usepackage[capitalise]{cleveref}
+\crefname{equation}{}{}
+\Crefname{equation}{}{}
 
+\usepackage[]{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,shapes.geometric, arrows,positioning,calc}
+\tikzset{
+	block/.style = {draw, fill=white, rectangle, minimum height=3em, minimum width=3em},
+	tmp/.style  = {coordinate}, 
+	sum/.style= {draw, fill=white, circle, node distance=1cm},
+	input/.style = {coordinate},
+	output/.style= {coordinate},
+	pinstyle/.style = {pin edge={to-,thin,black}
+	}
+}
+
+% Setup for use of lemmas and theorems
+
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem{conj}[thm]{Conjecture}
+
+% Table stuff
+\usepackage{booktabs}
 
 % Some very useful LaTeX packages include:
 % (uncomment the ones you want to load)
@@ -89,10 +129,6 @@
 % \ifCLASSINFOpdf conditional that works the same way.
 % When switching from latex to pdflatex and vice-versa, the compiler may
 % have to be run twice to clear warning/error messages.
-
-
-
-
 
 
 % *** CITATION PACKAGES ***
@@ -222,11 +258,11 @@
 
 
 % *** SUBFIGURE PACKAGES ***
-%\ifCLASSOPTIONcompsoc
-%  \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
-%\else
-%  \usepackage[caption=false,font=footnotesize]{subfig}
-%\fi
+\ifCLASSOPTIONcompsoc
+  \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\else
+  \usepackage[caption=false,font=footnotesize]{subfig}
+\fi
 % subfig.sty, written by Steven Douglas Cochran, is the modern replacement
 % for subfigure.sty, the latter of which is no longer maintained and is
 % incompatible with some LaTeX packages including fixltx2e. However,
@@ -325,28 +361,28 @@
 % not capitalized unless they are the first or last word of the title.
 % Linebreaks \\ can be used within to get better formatting as desired.
 % Do not put math or special symbols in the title.
-\title{Bare Demo of IEEEtran.cls\\ for IEEE Conferences}
+\title{Modelling and Networked Control of Water Distribution Networks}
 
 
 % author names and affiliations
 % use a multiple column layout for up to three different
 % affiliations
-\author{\IEEEauthorblockN{Michael Shell}
-\IEEEauthorblockA{School of Electrical and\\Computer Engineering\\
-Georgia Institute of Technology\\
-Atlanta, Georgia 30332--0250\\
-Email: http://www.michaelshell.org/contact.html}
-\and
-\IEEEauthorblockN{Homer Simpson}
-\IEEEauthorblockA{Twentieth Century Fox\\
-Springfield, USA\\
-Email: homer@thesimpsons.com}
-\and
-\IEEEauthorblockN{James Kirk\\ and Montgomery Scott}
-\IEEEauthorblockA{Starfleet Academy\\
-San Francisco, California 96678--2391\\
-Telephone: (800) 555--1212\\
-Fax: (888) 555--1212}}
+%\author{\IEEEauthorblockN{Michael Shell}
+%\IEEEauthorblockA{School of Electrical and\\Computer Engineering\\
+%Georgia Institute of Technology\\
+%Atlanta, Georgia 30332--0250\\
+%Email: http://www.michaelshell.org/contact.html}
+%\and
+%\IEEEauthorblockN{Homer Simpson}
+%\IEEEauthorblockA{Twentieth Century Fox\\
+%Springfield, USA\\
+%Email: homer@thesimpsons.com}
+%\and
+%\IEEEauthorblockN{James Kirk\\ and Montgomery Scott}
+%\IEEEauthorblockA{Starfleet Academy\\
+%	San Francisco, California 96678--2391\\
+%	Telephone: (800) 555--1212\\
+%	Fax: (888) 555--1212}}
 
 % conference papers do not typically use \thanks and this command
 % is locked out in conference mode. If really needed, such as for
@@ -356,20 +392,18 @@ Fax: (888) 555--1212}}
 % for over three affiliations, or if they all won't fit within the width
 % of the page, use this alternative format:
 % 
-%\author{\IEEEauthorblockN{Michael Shell\IEEEauthorrefmark{1},
-%Homer Simpson\IEEEauthorrefmark{2},
-%James Kirk\IEEEauthorrefmark{3}, 
-%Montgomery Scott\IEEEauthorrefmark{3} and
-%Eldon Tyrell\IEEEauthorrefmark{4}}
-%\IEEEauthorblockA{\IEEEauthorrefmark{1}School of Electrical and Computer Engineering\\
-%Georgia Institute of Technology,
-%Atlanta, Georgia 30332--0250\\ Email: see http://www.michaelshell.org/contact.html}
-%\IEEEauthorblockA{\IEEEauthorrefmark{2}Twentieth Century Fox, Springfield, USA\\
-%Email: homer@thesimpsons.com}
-%\IEEEauthorblockA{\IEEEauthorrefmark{3}Starfleet Academy, San Francisco, California 96678-2391\\
-%Telephone: (800) 555--1212, Fax: (888) 555--1212}
-%\IEEEauthorblockA{\IEEEauthorrefmark{4}Tyrell Inc., 123 Replicant Street, Los Angeles, California 90210--4321}}
-
+\author{\IEEEauthorblockN{
+Martin Højlund Therkildsen\IEEEauthorrefmark{0},
+Rasmus Løvschall Kristiansen\IEEEauthorrefmark{0},
+Kasper Laustsen\IEEEauthorrefmark{0}, 
+Jeppe Nørgaard Jensen\IEEEauthorrefmark{0},\\
+Laurits Hastrup Andersen\IEEEauthorrefmark{0},
+Mathias Clement Frederiksen\IEEEauthorrefmark{0} and 
+Christian Møller Jensen\IEEEauthorrefmark{0}}
+\\ 
+\IEEEauthorblockA{\IEEEauthorrefmark{0}Technical Faculty of IT and Design, Department of Electronic Systems, Aalborg University
+\\ Email: es-21-ca-7-733@student.aau.dk}
+}
 
 
 
@@ -384,8 +418,8 @@ Fax: (888) 555--1212}}
 
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
-\begin{abstract}
-The abstract goes here.
+\begin{abstract}\label{sec:Abstract}
+High quality control of Water Distribution Networks (WDN) is critical to reliable supply of drinking water to consumers, but is subject to complex nonlinear dynamics and losses induced by actuator characteristics, unmeasured disturbances, and long-distance wireless communication. This paper achieves constant elevated water reservoir (EWR) pressure via an outer velocity-form Linear Quadratic Regulator (VF-LQR) and an inner PID pump control loop. Disturbance rejection in the outer loop and leakage detection are facilitated by a Kalman filter (KF) based on a harmonic disturbance model. Comprehensive simulation validation of the proposed control paradigm is presented, and an analytical proof of system stability for arbitrarily large packet loss under the assumption of a Try-Once-and-Discard (TOD) protocol is given.
 \end{abstract}
 
 % no keywords
@@ -404,26 +438,8 @@ The abstract goes here.
 \IEEEpeerreviewmaketitle
 
 
-
-\section{Introduction}
-% no \IEEEPARstart
-This demo file is intended to serve as a ``starter file''
-for IEEE conference papers produced under \LaTeX\ using
-IEEEtran.cls version 1.8b and later.
-% You must have at least 2 lines in the paragraph with the drop letter
-% (should never be an issue)
-I wish you the best of success.
-
-\hfill mds
- 
-\hfill August 26, 2015
-
-\subsection{Subsection Heading Here}
-Subsection text here.
-
-
-\subsubsection{Subsubsection Heading Here}
-Subsubsection text here.
+\section{Introduction}\label{sec:Introduction}
+\input{Chapters/Introduction}
 
 
 % An example of a floating figure using the graphicx package.
@@ -520,23 +536,32 @@ Subsubsection text here.
 % footnotes above bottom floats. This can be corrected via the
 % \fnbelowfloat command of the stfloats package.
 
+\section{System Modelling}\label{sec:SysModel}
+\input{Chapters/SystemModel}
+
+\section{Control Structure}\label{sec:ControlStructure}
+\input{Chapters/ControlStructure}
 
 
+\section{Results}\label{sec:Results}
+\input{Chapters/Results}
 
-\section{Conclusion}
-The conclusion goes here.
+\section{Discussion and Future Work}\label{sec:DiscFuturWork}
+\input{Chapters/Discussion}
 
-
-
+\section{Conclusion}\label{sec:Conclusion}
+\input{Chapters/Conclusion}
 
 % conference papers do not normally have an appendix
 
 
 % use section* for acknowledgment
-\section*{Acknowledgment}
+\section*{Acknowledgments}
+\input{Chapters/Acknowledgment}
 
 
-The authors would like to thank...
+
+
 
 
 
@@ -566,7 +591,7 @@ The authors would like to thank...
 % (used to reserve space for the reference number labels box)
 
 \bibliographystyle{ieeetran}
-%\bibliography{bib file}
+\bibliography{../../RefLib/CA7Projekt.bib}
 
 
 

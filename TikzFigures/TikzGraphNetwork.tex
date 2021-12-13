@@ -1,0 +1,48 @@
+	\begin{tikzpicture}[node distance=30mm, thick, main/.style = {draw,circle,minimum size=0.8cm}] 
+		\node (1)  {};
+		\node[main] (2) [node distance={15mm},right of=1] {$v_1$}; 
+		\node[main] (3) [node distance={1.5cm},right of=2] {$v_2$};
+		\node[main] (4) [right of=3] {$v_3$};
+		\node[main] (5) [right of=4] {$v_4$};
+		\node[main] (6) [right of=5] {$v_5$};
+		\node (7) [node distance={15mm},right of=6] {};
+		%Create 3 (4) nodes in middle part of graph
+		\node[main] (8) [below of=4] {$ v_6 $};
+		\node[main] (9) [node distance={20mm},below of=5] {$ v_7 $};
+		\node[main] (11) [node distance={15mm},below of=9] {$ v_8 $};
+		\node (10) [node distance={15mm},right of=11] {};
+		%First 5 (7) nodes in bottom part of graph
+		\node[main] (12) [below of=8] {$ v_{10} $};
+		\node[main] (13) [left of=12] {$ v_9 $};
+		\node(14) [node distance={15mm},left of=13] {};
+		\node[main] (15) [right of=12] {$ v_{11} $};
+		\node[main] (16) [right of=15] {$ v_{12} $};
+		\node[main] (17) [node distance={1.5cm},right of=16] {$ v_{13} $};
+		\node(18) [node distance={15mm},right of=17] {};
+		
+		%Edges with direction
+		\path [->] (2) edge node[above] {$e_{1}$} (3); 	%Edge v1 -> v2
+		\path [->] (3) edge node[above] {$e_{2}$} (4); 	%Edge v2 -> v3
+		\path [->] (4) edge node[above] {$e_{3}$} (5); 	%Edge v3 -> v4
+		\path [->] (5) edge node[above] {$e_{4}$} (6); 	%Edge v4 -> v5
+		
+		\path [->] (4) edge node[left] {$e_{5}$} (8); 	%Edge v3 -> v6
+		\path [->] (5) edge node[right] {$e_{6}$} (9); 	%Edge v4 -> v7
+		\path [->] (8) edge node[above] {$e_{7}$} (9); 	%Edge v6 -> v7
+		\path [->] (8) edge node[left] {$e_{8}$} (12); 	%Edge v6 -> v10
+		\path [->] (9) edge node[right] {$e_{9}$} (11); 	%Edge v7 -> v8
+		\path [->] (11) edge node[right] {$e_{10}$} (15);	 %Edge v8 -> v11
+		
+		
+		\path [->] (12) edge node[below] {$e_{11}$} (13); %Edge v10 -> v9
+		\path [->] (15) edge node[below] {$e_{12}$} (12); %Edge v11 -> v10
+		\path [->] (16) edge node[below] {$e_{13}$} (15); %Edge v12 -> v11
+		\path [->] (17) edge node[below] {$e_{14}$} (16); %Edge v13 -> v12
+		
+		%External flows
+		\draw[->,dashed,] (1) -- node[above] {$d_1$} (2); %Create d1
+		\draw[->,dashed,] (6) -- node[above] {$d_5$} (7); %Create d5
+		\draw[->,dashed,] (13) -- node[above] {$d_9$} (14); %Create d13
+		\draw[->,dashed,] (18) -- node[above] {$d_{13}$} (17); %Create d13
+		\draw[<->,dashed,] (10) -- node[above] {$d_\tau$} (11); %Create d_tau
+	\end{tikzpicture} 
