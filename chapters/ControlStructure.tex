@@ -42,7 +42,7 @@ u^*(k) = \sum_{i=1}^{k} \tilde{u}^*(i)
 where $P$ is the solution to the discrete algebraic Riccatti equation and the pairs $(A,B)$ and $(A,C)$ in \cref{eq:VelocityMatrices} are respectively controllable and observable, while $(Q,R)$ are positive semidefinite. This control policy clearly has tracking as $\zeta(k+1) = 0$ implies $y(k+1)-r(k+1) = 0$, and has integral action by virtue of its incremental form. However, it lacks disturbance rejection. Assuming that we are only concerned with optimal control of the disturbance-free subsystem, complete rejection of the state disturbance $\delta(k)$ can be achieved by augmenting \cref{eq:OptimalVF-LQRPolicy} \cite{Singh2017}:
 
 \begin{equation}
-	u(k) = \sum_{i=1}^{k} \tilde{u}^*(k) - B^\dagger \mathcal{B}\delta(k)
+	u(k) = \sum_{i=1}^{k} \tilde{u}^*(i) - B^\dagger \mathcal{B}\delta(i)
 \end{equation}
 
 where $B^\dagger$ is the Moore-Penrose pseudoinverse of $B$ and $\mathcal{B}$ is the disturbance input matrix. The value of this disturbance can be estimated by exploiting the knowledge that consumer demand is often approximately cosinusoidal \cite{Anele2017}, and building a disturbance estimator based on the model $\hat{d}_c = \beta + \alpha\cos(\omega t)$, which in the single-frequency case can be represented by the state-space model:
