@@ -6,7 +6,7 @@
 	\node [block, right of=sum1, node distance = 1.5cm] (LQR) {LQR};
 	\node [sum, right of=LQR, node distance =
 	1.5cm] (sum2) {};
-	\node [block, right of=sum2, node distance = 1.5cm] (PID){PID};
+	\node [block, right of=sum2, node distance = 1.5cm] (PID){PI};
 	\node [block, right of=PID, align=center] (Fast){Fast\\Dynamics};
 	\node [block, right of=Fast, node distance = 3cm, align=center] (Slow){Slow\\Dynamics};
 	\node [output, right of=Slow] (output) {};

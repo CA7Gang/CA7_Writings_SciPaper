@@ -418,11 +418,6 @@
 		
 		% As a general rule, do not put math, special symbols or citations
 		% in the abstract
-		\begin{abstract}\label{sec:Abstract}
-			High quality control of Water Distribution Networks (WDN) is critical to reliable supply of drinking water to consumers, but is subject to complex nonlinear dynamics and losses induced by actuator characteristics, unmeasured disturbances, and long-distance wireless communication. We achieve constant elevated water reservoir (EWR) level via an outer velocity-form Linear Quadratic Regulator (VF-LQR) and an inner PID pump control loop. Disturbance rejection in the outer loop and leakage detection are facilitated by a Kalman filter (KF) based on a harmonic disturbance model. Comprehensive experimental validation of the proposed control paradigm is presented, and an analytical proof of marginal stabilisability for arbitrarily large packet loss under the assumption of a Try-Once-and-Discard (TOD) protocol is given. 
-			\\
-			Keywords: Water Distribution, LQR, Networked Control
-		\end{abstract}
 		
 		% no keywords
 		
@@ -542,7 +537,7 @@
 		
 		\begin{figure}[h]
 			\centering
-			\resizebox{0.75\columnwidth}{!}{
+			\resizebox{\columnwidth}{!}{
 				\input{TikzFigures/TikzControlStructure}}
 			\caption{Control strategy including control for fast and slow dynamics.}
 			\label{fig:tikzControlStrat}
@@ -550,7 +545,7 @@
 		
 		\section{Results}\label{sec:Results}
 		
-		The proposed control structure achieves offset-free EWR level regulation, as seen on \cref{fig:OuterLoop} once the supporting KF has converged to the actual consumer disturbances. After packet loss is introduced, the behaviour of the system becomes oscillatory, but remains stable in the mean-square sense, agreeing with \cite{Hu2007}.
+		The proposed control structure achieves offset-free EWR level regulation, as seen on \cref{fig:OuterLoop}, once the supporting KF has converged to the actual consumer disturbances. After packet loss is introduced, the behaviour of the system becomes oscillatory, but remains stable in the averaged sense, agreeing with \cite{Hu2007}.
 		
 		\begin{figure}[h!]
 			\centering

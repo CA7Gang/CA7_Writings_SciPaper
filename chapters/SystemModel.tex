@@ -2,18 +2,18 @@ The WDN of concern in this paper is a two-pump, two-consumer, single-EWR system 
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.5\linewidth]{Graphics/WDNModel.pdf}
+	\includegraphics[width=0.7\linewidth]{Graphics/WDNModel.pdf}
 	\caption{Schematic of the WDN under study.}
 	\label{fig:WDNModel}
 \end{figure}
 
-As described in \Cref{sec:Introduction}, the dynamics of a WDN can be separated into a tank slow pressure regime and a fast flow regime. We use a directed graph model of the WDN corresponding to \cref{fig:tikzWDNGraph}, with the vertices $\{v_1,..,v_n\}$, edges $\{e_1,..,e_m\}$, nodal demands and nodal heights $d_i, h_i$ and edge flows $q_i$:
+As described in \Cref{sec:Introduction}, the dynamics of a WDN can be separated into a slow tank pressure regime and a fast flow regime. We use a directed graph model of the WDN corresponding to \cref{fig:tikzWDNGraph}, with the nodes $\{v_1,..,v_n\}$, edges $\{e_1,..,e_m\}$, nodal demands and nodal heights $d_i, h_i$ and edge flows $q_i$.
 
 \begin{figure}[h!]
 	\centering
 	\resizebox{\columnwidth}{!}{
 		\input{TikzFigures/TikzGraphNetwork.tex}}
-		\caption{Graph Network of Water Distributed Network. Note that $e_1$ and $e_{14} $ are only inserted to be able to measure pump flow.}
+		\caption{Graph Network of Water Distributed Network.}
 	\label{fig:tikzWDNGraph}
 \end{figure}  
 
@@ -28,8 +28,10 @@ In addition to these graph-related definitions, we require boundary conditions i
 Where $p$ is the vector of nodal pressures. Furthermore, mass conservation is assumed at the graph boundary. This implies that there can at most be $n-1$ independent nodal demands, i.e.:
 
 \begin{equation}\label{eq:MassConservation}
-	d_n = -\sum_{i=1}^{n-1}d_i
+	d_k = -\sum_{i=1}^{n-1}d_i
 \end{equation}
+
+where $n$ is the total number of nodes in the system and $d_k$ is the non-free residual demand induced by the $n-1$ free demands.
 
 %Secondly, we require two lemmas pertaining to the spanning tree subspace $H_T$ of $H$: \\
 %
@@ -88,7 +90,7 @@ which can be represented as a discrete state-space model with a disturbance term
 	\end{gathered}
 \end{equation}
 
-We note that the consumer flows $d_c$ can be considered a disturbance to be cancelled under this interpretation, while the pump flows $d_p$ can be considered the input to the pressure dynamics. This supports the concept of an inner flow control loop and a disturbance rejection scheme.
+We note that the consumer flows $d_c$ can be considered a disturbance to be cancelled under this interpretation, while the pump flows $d_p$ can be considered the actuators of the pressure dynamics. This supports the concept of an inner flow control loop and a disturbance rejection scheme.
 
 \subsection{Fast Dynamics}\label{subsec:FastDynamics}
 
@@ -149,10 +151,10 @@ where $\mathcal{J},\lambda$ apply only to pipes, $\mu$ applies only to valves, $
 We now introduce the open-node and tank mapping matrices ${F}$ and ${G}$, which are defined such that the edge flows can be written as:
 
 \begin{equation}\label{eq:FlowDecomposition}
-		q = B^T q_c +	\begin{bmatrix} 0_{c \times n-1} \\ {H}_T^{-1} \end{bmatrix}\Big({F}d_f + {G}d_\tau \Big)
+		q = B^T q_C +	\begin{bmatrix} 0_{C \times n-1} \\ \bar{H}_T^{-1} \end{bmatrix}\Big(\bar{F}\bar{d}_f + \bar{G}\bar{d}_\tau \Big)
 \end{equation}
 
-where $q_c$ are the flows in the chords, $d_f$ is the vertex-ordered vector of non-tank demands at the boundary, and $d_\tau$ is the vector of tank demands at the boundary. We can then state the full nonlinear model of the fast dynamics as \cite{Rathore1030}:
+where $q_C$ are the flows in the chords, $\bar{d}_f$ is the node-ordered vector of non-tank demands at the boundary, and $\bar{d}_\tau$ is the vector of tank demands at the boundary. The $\bar{\cdot}$ operator implies removal of the reference node. We can then state the full nonlinear model of the fast dynamics as \cite{Rathore1030}:
 
 
 
@@ -214,7 +216,7 @@ where $q_c$ are the flows in the chords, $d_f$ is the vertex-ordered vector of n
 	\end{split}
 \end{equation}
 
-where $q_n = \{q_c, d_f, d_\tau\}^T$and the matrices $\Phi, \Psi, \mathcal{I}$ are defined as:
+where $q_n = \{q_C, d_f, d_\tau\}^T$and the matrices $\Phi, \Psi, \mathcal{I}$ are defined as:
 
 \begin{equation}\label{eq:NonLinearModelMatrices}
 	\Phi \triangleq 
@@ -259,7 +261,7 @@ which exactly fits a classical linear state-space model structure of:
 	\end{gathered}
 \end{equation}
 
-Linearising \cref{eq:NonLinearModelWithTank} at its lone equilibrium point results in the following approximation:
+Linearising \cref{eq:NonLinearModelWithTank} at its lone equilibrium point and operating point $\Theta = \{0.5,0.5\}\wedge \omega = \{66,66\}$ results in the following approximation:
 
 \begin{equation}\label{eq:LinearisedModelWithTank}
 \begin{gathered}
@@ -293,7 +295,7 @@ We note that the eigenvalues of $A$ are strictly negative with nonzero real part
 \begin{figure}[h]
 	\centering
 	\includegraphics[height = 4cm,width=\linewidth]{Graphics/NominalFlows.pdf}
-	\caption{Comparison of nonlinear and linearised model behaviour, $1$-step-ahead prediction at operating point.}
+	\caption{Comparison of non-linear and linearised model behaviour, $1$-step-ahead prediction at operating point initialised at random non-equilibrium states.}
 	\label{fig:CompNonLinEQ}
 \end{figure}
 
@@ -306,4 +308,4 @@ Evaluating the model away from the linearisation operating point ($\Theta = \{0.
 	\label{fig:CompNonLinNotEQ}
 \end{figure}
 
-The largest error is with respect to the chord and consumer flows, which is intuitive as the linearised model assumes a constant valve setting. We note a significant error in the tank flow, but also note that this error is constant as predicted and therefore trivially compensated for with integral action. Having confirmed the small-signal accuracy of the linearised model, we now move on to design of the control algorithm.
+The largest error is with respect to the chord and consumer flows, which is intuitive as the linearised model assumes a specific valve setting. We note a significant error in the tank flow, but also note that this error is constant as predicted and therefore trivially compensated for with integral action. Having confirmed the small-signal accuracy of the linearised model, we now move on to design of the control algorithm.
